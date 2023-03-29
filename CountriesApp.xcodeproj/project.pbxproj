@@ -9,23 +9,45 @@
 /* Begin PBXBuildFile section */
 		080686D629D31E1600075BEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686D529D31E1600075BEF /* AppDelegate.swift */; };
 		080686D829D31E1600075BEF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686D729D31E1600075BEF /* SceneDelegate.swift */; };
-		080686DA29D31E1600075BEF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686D929D31E1600075BEF /* ViewController.swift */; };
 		080686DD29D31E1600075BEF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 080686DB29D31E1600075BEF /* Main.storyboard */; };
 		080686E029D31E1600075BEF /* CountriesApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 080686DE29D31E1600075BEF /* CountriesApp.xcdatamodeld */; };
 		080686E229D31E1800075BEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 080686E129D31E1800075BEF /* Assets.xcassets */; };
 		080686E529D31E1800075BEF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 080686E329D31E1800075BEF /* LaunchScreen.storyboard */; };
+		080686F229D31EA400075BEF /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686EC29D31EA400075BEF /* HomePresenter.swift */; };
+		080686F329D31EA400075BEF /* HomeWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686ED29D31EA400075BEF /* HomeWorker.swift */; };
+		080686F429D31EA400075BEF /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686EE29D31EA400075BEF /* HomeRouter.swift */; };
+		080686F529D31EA400075BEF /* HomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686EF29D31EA400075BEF /* HomeModels.swift */; };
+		080686F629D31EA400075BEF /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686F029D31EA400075BEF /* HomeViewController.swift */; };
+		080686F729D31EA400075BEF /* HomeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080686F129D31EA400075BEF /* HomeInteractor.swift */; };
+		08C4B2F329D48E170080270C /* CountryDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B2ED29D48E170080270C /* CountryDetailPresenter.swift */; };
+		08C4B2F429D48E170080270C /* CountryDetailWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B2EE29D48E170080270C /* CountryDetailWorker.swift */; };
+		08C4B2F529D48E170080270C /* CountryDetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B2EF29D48E170080270C /* CountryDetailRouter.swift */; };
+		08C4B2F629D48E170080270C /* CountryDetailModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B2F029D48E170080270C /* CountryDetailModels.swift */; };
+		08C4B2F729D48E170080270C /* CountryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B2F129D48E170080270C /* CountryDetailViewController.swift */; };
+		08C4B2F829D48E170080270C /* CountryDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B2F229D48E170080270C /* CountryDetailInteractor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		080686D229D31E1600075BEF /* CountriesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CountriesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		080686D529D31E1600075BEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		080686D729D31E1600075BEF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		080686D929D31E1600075BEF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		080686DC29D31E1600075BEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		080686DF29D31E1600075BEF /* CountriesApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CountriesApp.xcdatamodel; sourceTree = "<group>"; };
 		080686E129D31E1800075BEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		080686E429D31E1800075BEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		080686E629D31E1800075BEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		080686EC29D31EA400075BEF /* HomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
+		080686ED29D31EA400075BEF /* HomeWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWorker.swift; sourceTree = "<group>"; };
+		080686EE29D31EA400075BEF /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
+		080686EF29D31EA400075BEF /* HomeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModels.swift; sourceTree = "<group>"; };
+		080686F029D31EA400075BEF /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		080686F129D31EA400075BEF /* HomeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeInteractor.swift; sourceTree = "<group>"; };
+		08C4B2ED29D48E170080270C /* CountryDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailPresenter.swift; sourceTree = "<group>"; };
+		08C4B2EE29D48E170080270C /* CountryDetailWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailWorker.swift; sourceTree = "<group>"; };
+		08C4B2EF29D48E170080270C /* CountryDetailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailRouter.swift; sourceTree = "<group>"; };
+		08C4B2F029D48E170080270C /* CountryDetailModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailModels.swift; sourceTree = "<group>"; };
+		08C4B2F129D48E170080270C /* CountryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailViewController.swift; sourceTree = "<group>"; };
+		08C4B2F229D48E170080270C /* CountryDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailInteractor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,9 +80,9 @@
 		080686D429D31E1600075BEF /* CountriesApp */ = {
 			isa = PBXGroup;
 			children = (
+				080686F829D322E900075BEF /* Scenes */,
 				080686D529D31E1600075BEF /* AppDelegate.swift */,
 				080686D729D31E1600075BEF /* SceneDelegate.swift */,
-				080686D929D31E1600075BEF /* ViewController.swift */,
 				080686DB29D31E1600075BEF /* Main.storyboard */,
 				080686E129D31E1800075BEF /* Assets.xcassets */,
 				080686E329D31E1800075BEF /* LaunchScreen.storyboard */,
@@ -68,6 +90,41 @@
 				080686DE29D31E1600075BEF /* CountriesApp.xcdatamodeld */,
 			);
 			path = CountriesApp;
+			sourceTree = "<group>";
+		};
+		080686F829D322E900075BEF /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				08C4B2EC29D48E010080270C /* CountryDetail */,
+				080686F929D3230500075BEF /* Home */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		080686F929D3230500075BEF /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				080686EC29D31EA400075BEF /* HomePresenter.swift */,
+				080686ED29D31EA400075BEF /* HomeWorker.swift */,
+				080686EE29D31EA400075BEF /* HomeRouter.swift */,
+				080686EF29D31EA400075BEF /* HomeModels.swift */,
+				080686F029D31EA400075BEF /* HomeViewController.swift */,
+				080686F129D31EA400075BEF /* HomeInteractor.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		08C4B2EC29D48E010080270C /* CountryDetail */ = {
+			isa = PBXGroup;
+			children = (
+				08C4B2ED29D48E170080270C /* CountryDetailPresenter.swift */,
+				08C4B2EE29D48E170080270C /* CountryDetailWorker.swift */,
+				08C4B2EF29D48E170080270C /* CountryDetailRouter.swift */,
+				08C4B2F029D48E170080270C /* CountryDetailModels.swift */,
+				08C4B2F129D48E170080270C /* CountryDetailViewController.swift */,
+				08C4B2F229D48E170080270C /* CountryDetailInteractor.swift */,
+			);
+			path = CountryDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,9 +198,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				080686DA29D31E1600075BEF /* ViewController.swift in Sources */,
+				080686F529D31EA400075BEF /* HomeModels.swift in Sources */,
 				080686D629D31E1600075BEF /* AppDelegate.swift in Sources */,
+				080686F729D31EA400075BEF /* HomeInteractor.swift in Sources */,
+				08C4B2F429D48E170080270C /* CountryDetailWorker.swift in Sources */,
+				080686F429D31EA400075BEF /* HomeRouter.swift in Sources */,
 				080686E029D31E1600075BEF /* CountriesApp.xcdatamodeld in Sources */,
+				08C4B2F829D48E170080270C /* CountryDetailInteractor.swift in Sources */,
+				080686F629D31EA400075BEF /* HomeViewController.swift in Sources */,
+				080686F229D31EA400075BEF /* HomePresenter.swift in Sources */,
+				08C4B2F529D48E170080270C /* CountryDetailRouter.swift in Sources */,
+				080686F329D31EA400075BEF /* HomeWorker.swift in Sources */,
+				08C4B2F729D48E170080270C /* CountryDetailViewController.swift in Sources */,
+				08C4B2F329D48E170080270C /* CountryDetailPresenter.swift in Sources */,
+				08C4B2F629D48E170080270C /* CountryDetailModels.swift in Sources */,
 				080686D829D31E1600075BEF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
