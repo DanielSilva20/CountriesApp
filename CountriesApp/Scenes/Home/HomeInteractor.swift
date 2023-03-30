@@ -17,12 +17,13 @@ protocol HomeBusinessLogic {
 }
 
 protocol HomeDataStore {
-    // Variables to store data to be passed between scenes
+    var selectedCountry: Country? { get set }
 }
 
 class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var presenter: HomePresentationLogic?
     var worker: HomeWorker?
+    var selectedCountry: Country?
 
     func searchCountry(request: Home.Search.Request) {
         worker = HomeWorker()
@@ -31,6 +32,7 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
             case .success(let country):
                 let response = Home.Search.Response(result: .success(country))
                 self?.presenter?.presentCountrySearchResult(response: response)
+                self?.selectedCountry = country
             case .failure(let error):
                 self?.presenter?.presentError(error: error)
             }

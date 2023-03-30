@@ -19,14 +19,14 @@ protocol CountryDetailBusinessLogic
 
 protocol CountryDetailDataStore
 {
-  //var name: String { get set }
+    var country: Country? { get set }
 }
 
 class CountryDetailInteractor: CountryDetailBusinessLogic, CountryDetailDataStore
 {
   var presenter: CountryDetailPresentationLogic?
   var worker: CountryDetailWorker?
-  //var name: String = ""
+  var country: Country?
   
   // MARK: Do something
   
