@@ -68,11 +68,8 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         verticalStackView.addArrangedSubview(submitButton)
 
         countryCode = UILabel()
-        countryCode.text = "O codigo do país é:"
         countryCurrency = UILabel()
-        countryCurrency.text = "A currency do país é:"
         countryLanguage = UILabel()
-        countryLanguage.text = "A lingua do país é:"
 
         verticalStackView.addArrangedSubview(countryCode)
         verticalStackView.addArrangedSubview(countryCurrency)
@@ -117,16 +114,16 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
 
     func displayCountrySearchResult(viewModel: Home.Search.ViewModel) {
         if !viewModel.isError {
-//            DispatchQueue.main.async { [weak self] in
-//                self?.countryCode.text = "O codigo do país é: " + viewModel.countryCode
-//                self?.countryCurrency.text = "A currency do país é: " + viewModel.currency
-//                self?.countryLanguage.text = "A lingua do país é: " + viewModel.language
-//                self?.searchTextField.text = ""
-//            }
             DispatchQueue.main.async { [weak self] in
-                self?.router?.routeToCountryDetail()
+                self?.countryCode.text = viewModel.countryCode
+                self?.countryCurrency.text = viewModel.currency
+                self?.countryLanguage.text = viewModel.language
                 self?.searchTextField.text = ""
             }
+//            DispatchQueue.main.async { [weak self] in
+//                self?.router?.routeToCountryDetail()
+//                self?.searchTextField.text = ""
+//            }
         } else {
             DispatchQueue.main.async { [weak self] in
                 let alert = UIAlertController(title: "Error", message: viewModel.errorMessage, preferredStyle: .alert)

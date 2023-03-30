@@ -25,10 +25,11 @@ class HomePresenter: HomePresentationLogic {
 
         switch response.result {
         case .success(let country):
-            let language = country.languages.values.first ?? "N/A"
-            let currency = country.currencies.values.first.map { "\($0.name) (\($0.symbol))" } ?? "N/A"
+            let language = "country.base.language".localized + (country.languages.values.first ?? "N/A")
+            let currency = "country.base.currency".localized + (country.currencies.values.first.map { "\($0.name) (\($0.symbol))" } ?? "N/A")
+            let code = "country.base.code".localized + country.cca2
 
-            viewModel = Home.Search.ViewModel(countryCode: country.cca2, language: language, currency: currency, isError: false, errorMessage: "")
+            viewModel = Home.Search.ViewModel(countryCode: code, language: language, currency: currency, isError: false, errorMessage: "")
         case .failure:
             viewModel = Home.Search.ViewModel(countryCode: "N/A", language: "N/A", currency: "N/A", isError: true, errorMessage: "")
         }
@@ -41,17 +42,17 @@ class HomePresenter: HomePresentationLogic {
 
         switch error {
         case NetworkError.invalidURL:
-            message = "Invalid URL"
+            message = "error.network.url".localized
         case NetworkError.noData:
-            message = "No data received"
+            message = "error.network.noData".localized
         case NetworkError.decodingError:
-            message = "Error decoding data"
+            message = "error.network.decoding".localized
         case APIError.notFound:
-            message = "Country not found"
+            message = "error.api.countryNotFound".localized
         case let APIError.other(apiError):
-            message = "API error: \(apiError.localizedDescription)"
+            message = "error.api.other".localized + "\(apiError.localizedDescription)"
         default:
-            message = "Unexpected error occurred"
+            message = "error.default".localized
         }
 
         let viewModel = Home.Search.ViewModel(countryCode: "N/A", language: "N/A", currency: "N/A", isError: true, errorMessage: message)

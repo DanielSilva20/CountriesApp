@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  CountriesApp
+
+  Created by Daniel Silva on 30/03/2023.
+  
+*/
+//Countries
+"country.base.code" = "The country code is: ";
+"country.base.currency" = "The country currency is: ";
+"country.base.language" = "The principal language of the country is: ";
+
+//Errors
+"error.network.url" = "Invalid URL";
+"error.network.noData" = "No data received";
+"error.network.decoding" = "Error decoding data";
+"error.api.countryNotFound" = "Country not found";
+"error.api.other" = "API error: ";
+"error.default" = "Unexpected error occurred";
