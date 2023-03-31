@@ -28,8 +28,6 @@ enum CountryDetail
             let countryCode: String
             let language: String
             let currency: String
-            let isError: Bool
-            let errorMessage: String
         }
     }
 }

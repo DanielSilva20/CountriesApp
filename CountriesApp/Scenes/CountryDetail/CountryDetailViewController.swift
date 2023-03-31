@@ -13,7 +13,7 @@
 import UIKit
 
 protocol CountryDetailDisplayLogic: AnyObject {
-    func displaySomething(viewModel: CountryDetail.Something.ViewModel)
+    func displayCountrySearchResult(viewModel: CountryDetail.Something.ViewModel)
 }
 
 class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
@@ -95,24 +95,23 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        doSomething()
         view.backgroundColor = .white
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        doSomething()
+        passCountryData()
     }
 
     // MARK: Do something
 
-    func doSomething() {
+    func passCountryData() {
         guard let country = router?.dataStore?.country else { return }
         let request = CountryDetail.Something.Request(country: country)
         interactor?.doSomething(request: request)
     }
 
-    func displaySomething(viewModel: CountryDetail.Something.ViewModel) {
+    func displayCountrySearchResult(viewModel: CountryDetail.Something.ViewModel) {
         DispatchQueue.main.async { [weak self] in
             self?.countryCode.text = viewModel.countryCode
             self?.countryCurrency.text = viewModel.currency

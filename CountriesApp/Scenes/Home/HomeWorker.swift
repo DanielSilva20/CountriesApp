@@ -4,7 +4,6 @@ class HomeWorker {
     private let apiClient = APIClient()
 
     func fetchCountryInfo(countryName: String, completion: @escaping (Result<Country, Error>) -> Void) {
-        print("I entered in the Worker")
         guard let escapedName = countryName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "https://restcountries.com/v3.1/name/\(escapedName)?fullText=true") else {
             completion(.failure(NetworkError.invalidURL))
@@ -15,7 +14,6 @@ class HomeWorker {
             switch result {
             case .success(let countries):
                 if let country = countries.first {
-                    print("The country is:",country)
                     completion(.success(country))
                 } else {
                     completion(.failure(NetworkError.noData))
@@ -56,9 +54,6 @@ class APIClient {
                 let decodedObject = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(decodedObject))
             } catch {
-                // Print the JSON response and decoding error
-                print("JSON Data: \(String(data: data, encoding: .utf8) ?? "nil")")
-                print("Decoding Error: \(error)")
                 completion(.failure(NetworkError.decodingError))
             }
         }.resume()

@@ -24,17 +24,13 @@ class HomePresenter: HomePresentationLogic {
         let viewModel: Home.Search.ViewModel
 
         switch response.result {
-        case .success(let country):
-            let language = "country.base.language".localized + (country.languages.values.first ?? "N/A")
-            let currency = "country.base.currency".localized + (country.currencies.values.first.map { "\($0.name) (\($0.symbol))" } ?? "N/A")
-            let code = "country.base.code".localized + country.cca2
-
-            viewModel = Home.Search.ViewModel(countryCode: code, language: language, currency: currency, isError: false, errorMessage: "")
-        case .failure:
-            viewModel = Home.Search.ViewModel(countryCode: "N/A", language: "N/A", currency: "N/A", isError: true, errorMessage: "")
+        case .success:
+            viewModel = Home.Search.ViewModel(isError: false, errorMessage: nil)
+        case .failure(let error):
+            viewModel = Home.Search.ViewModel(isError: true, errorMessage: error.localizedDescription)
         }
 
-        viewController?.displayCountrySearchResult(viewModel: viewModel)
+        viewController?.sendCountrySearchResult(viewModel: viewModel)
     }
 
     func presentError(error: Error) {
@@ -55,7 +51,7 @@ class HomePresenter: HomePresentationLogic {
             message = "error.default".localized
         }
 
-        let viewModel = Home.Search.ViewModel(countryCode: "N/A", language: "N/A", currency: "N/A", isError: true, errorMessage: message)
-        viewController?.displayCountrySearchResult(viewModel: viewModel)
+        let viewModel = Home.Search.ViewModel(isError: true, errorMessage: message)
+        viewController?.sendCountrySearchResult(viewModel: viewModel)
     }
 }

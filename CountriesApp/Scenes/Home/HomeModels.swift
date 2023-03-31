@@ -23,11 +23,8 @@ enum Home {
         }
 
         struct ViewModel {
-            let countryCode: String
-            let language: String
-            let currency: String
             let isError: Bool
-            let errorMessage: String
+            let errorMessage: String?
         }
     }
 }

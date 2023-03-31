@@ -17,3 +17,7 @@
 "error.api.countryNotFound" = "Country not found";
 "error.api.other" = "API error: ";
 "error.default" = "Unexpected error occurred";
+
+//Alerts
+"alert.error.title" = "Error";
+"alert.okAction" = "OK";

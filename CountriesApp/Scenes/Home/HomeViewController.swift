@@ -13,7 +13,7 @@
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
-    func displayCountrySearchResult(viewModel: Home.Search.ViewModel)
+    func sendCountrySearchResult(viewModel: Home.Search.ViewModel)
 }
 
 class HomeViewController: UIViewController, HomeDisplayLogic {
@@ -111,22 +111,16 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
 
     // MARK: Do something
 
-    func displayCountrySearchResult(viewModel: Home.Search.ViewModel) {
+    func sendCountrySearchResult(viewModel: Home.Search.ViewModel) {
         if !viewModel.isError {
-//            DispatchQueue.main.async { [weak self] in
-//                self?.countryCode.text = viewModel.countryCode
-//                self?.countryCurrency.text = viewModel.currency
-//                self?.countryLanguage.text = viewModel.language
-//                self?.searchTextField.text = ""
-//            }
             DispatchQueue.main.async { [weak self] in
                 self?.router?.routeToCountryDetail()
                 self?.searchTextField.text = ""
             }
         } else {
             DispatchQueue.main.async { [weak self] in
-                let alert = UIAlertController(title: "Error", message: viewModel.errorMessage, preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                let alert = UIAlertController(title: "alert.error.title".localized, message: viewModel.errorMessage, preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "alert.okAction".localized, style: .default, handler: nil)
                 alert.addAction(okAction)
                 self?.present(alert, animated: true, completion: nil)
                 self?.searchTextField.text = ""
@@ -138,7 +132,6 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         guard let searchText = searchTextField.text else {
             return
         }
-        print("I will search the information about", searchText)
         let request = Home.Search.Request(countryName: searchText)
         interactor?.searchCountry(request: request)
     }
