@@ -23,13 +23,22 @@ class CountryDetailPresenter: CountryDetailPresentationLogic
     // MARK: Do something
 
     func presentCountrySearchResult(response: CountryDetail.CountryDetail.Response) {
-        let viewModel: CountryDetail.CountryDetail.ViewModel
         let language = "country.base.language".localized + (response.country.languages.values.first ?? "N/A")
         let currency = "country.base.currency".localized + (response.country.currencies.values.first.map { "\($0.name) (\($0.symbol))" } ?? "N/A")
         let code = "country.base.code".localized + response.country.cca2
-        let countryFlag = response.flag
 
-        viewModel = CountryDetail.CountryDetail.ViewModel(countryCode: code, language: language, currency: currency, flag: countryFlag)
+        var viewModel: CountryDetail.CountryDetail.ViewModel = CountryDetail.CountryDetail.ViewModel(countryCode: code, language: language, currency: currency, flag: UIImage())
+
+        if let countryFlag = response.flag {
+            viewModel = CountryDetail.CountryDetail.ViewModel(countryCode: code, language: language, currency: currency, flag: countryFlag)
+        } else {
+            if let imagePath = Bundle.main.path(forResource: "imageNotFound", ofType: "png") {
+                let image = UIImage(contentsOfFile: imagePath)
+                viewModel = CountryDetail.CountryDetail.ViewModel(countryCode: code, language: language, currency: currency, flag: image ?? UIImage())
+            }
+        }
+
+
 
         viewController?.displayCountrySearchResult(viewModel: viewModel)
     }

@@ -27,6 +27,7 @@
 		08C4B2F829D48E170080270C /* CountryDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B2F229D48E170080270C /* CountryDetailInteractor.swift */; };
 		08C4B30F29D5E4520080270C /* String+localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B30E29D5E4520080270C /* String+localizable.swift */; };
 		08C4B31A29D5E9AD0080270C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08C4B31929D5E9AD0080270C /* Localizable.strings */; };
+		08C4B31C29D722980080270C /* imageNotFound.png in Resources */ = {isa = PBXBuildFile; fileRef = 08C4B31B29D722980080270C /* imageNotFound.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		08C4B2F229D48E170080270C /* CountryDetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDetailInteractor.swift; sourceTree = "<group>"; };
 		08C4B30E29D5E4520080270C /* String+localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+localizable.swift"; sourceTree = "<group>"; };
 		08C4B31929D5E9AD0080270C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		08C4B31B29D722980080270C /* imageNotFound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = imageNotFound.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 			children = (
 				08C4B30E29D5E4520080270C /* String+localizable.swift */,
 				08C4B31929D5E9AD0080270C /* Localizable.strings */,
+				08C4B31B29D722980080270C /* imageNotFound.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 				08C4B31A29D5E9AD0080270C /* Localizable.strings in Resources */,
 				080686E229D31E1800075BEF /* Assets.xcassets in Resources */,
 				080686DD29D31E1600075BEF /* Main.storyboard in Resources */,
+				08C4B31C29D722980080270C /* imageNotFound.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

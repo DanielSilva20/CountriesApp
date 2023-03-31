@@ -127,8 +127,4 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
             self?.countryLanguage.text = viewModel.language
         }
     }
-
-    deinit {
-        print("deinit CountryDetailViewController")
-    }
 }

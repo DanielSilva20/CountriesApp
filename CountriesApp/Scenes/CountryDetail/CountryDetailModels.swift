@@ -23,7 +23,7 @@ enum CountryDetail
         }
         struct Response {
             let country: Country
-            let flag :UIImage
+            let flag : UIImage?
         }
         struct ViewModel {
             let countryCode: String

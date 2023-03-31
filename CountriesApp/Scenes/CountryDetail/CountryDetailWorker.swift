@@ -14,14 +14,12 @@ import UIKit
 
 class CountryDetailWorker {
     func loadCountryImage(from flagString: String, completion: @escaping (UIImage?) -> Void) {
-        print("LoadCountryImage begin")
         if let flagUrl = URL(string: flagString) {
             URLSession.shared.dataTask(with: flagUrl) { data, response, error in
                 guard let data = data, error == nil else {
                     completion(nil)
                     return
                 }
-
                 DispatchQueue.main.async {
                     completion(UIImage(data: data))
                 }

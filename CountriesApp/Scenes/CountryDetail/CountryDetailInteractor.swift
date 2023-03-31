@@ -29,11 +29,13 @@ class CountryDetailInteractor: CountryDetailBusinessLogic, CountryDetailDataStor
 
     func getCountryData(request: CountryDetail.CountryDetail.Request) {
         worker = CountryDetailWorker()
-        guard let flagString = request.country.flags.values.first else { return }
+        guard let flagString = request.country.flags["png"] else { return }
         worker?.loadCountryImage(from: flagString, completion: { [weak self] image in
-            print("getCountryData begin")
             if let image = image {
                 let response = CountryDetail.CountryDetail.Response(country: request.country, flag: image)
+                self?.presenter?.presentCountrySearchResult(response: response)
+            } else {
+                let response = CountryDetail.CountryDetail.Response(country: request.country, flag: nil)
                 self?.presenter?.presentCountrySearchResult(response: response)
             }
         })
