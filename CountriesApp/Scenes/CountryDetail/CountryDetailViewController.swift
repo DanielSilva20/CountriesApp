@@ -13,7 +13,7 @@
 import UIKit
 
 protocol CountryDetailDisplayLogic: AnyObject {
-    func displayCountrySearchResult(viewModel: CountryDetail.Something.ViewModel)
+    func displayCountrySearchResult(viewModel: CountryDetail.CountryDetail.ViewModel)
 }
 
 class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
@@ -21,6 +21,9 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
     var router: (NSObjectProtocol & CountryDetailRoutingLogic & CountryDetailDataPassing)?
 
     private var verticalStackView: UIStackView!
+
+    private var flagView: UIImageView!
+    private var countryFlag: UIImage!
 
     private var countryCode: UILabel!
     private var countryLanguage: UILabel!
@@ -52,12 +55,17 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
         verticalStackView.distribution = .fill
         verticalStackView.spacing = 8.0
 
+        countryFlag = UIImage()
+        flagView = UIImageView(image: countryFlag)
+        flagView.contentMode = .scaleAspectFit
+
         countryCode = UILabel()
         countryCurrency = UILabel()
         countryLanguage = UILabel()
         countryLanguage.numberOfLines = 2
         countryLanguage.textAlignment = .center
 
+        verticalStackView.addArrangedSubview(flagView)
         verticalStackView.addArrangedSubview(countryCode)
         verticalStackView.addArrangedSubview(countryCurrency)
         verticalStackView.addArrangedSubview(countryLanguage)
@@ -107,15 +115,20 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
 
     func passCountryData() {
         guard let country = router?.dataStore?.country else { return }
-        let request = CountryDetail.Something.Request(country: country)
-        interactor?.doSomething(request: request)
+        let request = CountryDetail.CountryDetail.Request(country: country)
+        interactor?.getCountryData(request: request)
     }
 
-    func displayCountrySearchResult(viewModel: CountryDetail.Something.ViewModel) {
+    func displayCountrySearchResult(viewModel: CountryDetail.CountryDetail.ViewModel) {
         DispatchQueue.main.async { [weak self] in
+            self?.flagView.image = viewModel.flag
             self?.countryCode.text = viewModel.countryCode
             self?.countryCurrency.text = viewModel.currency
             self?.countryLanguage.text = viewModel.language
         }
+    }
+
+    deinit {
+        print("deinit CountryDetailViewController")
     }
 }

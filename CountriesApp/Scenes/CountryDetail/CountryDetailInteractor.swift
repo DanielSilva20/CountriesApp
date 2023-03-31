@@ -13,7 +13,7 @@
 import UIKit
 
 protocol CountryDetailBusinessLogic {
-    func doSomething(request: CountryDetail.Something.Request)
+    func getCountryData(request: CountryDetail.CountryDetail.Request)
 }
 
 protocol CountryDetailDataStore {
@@ -27,8 +27,15 @@ class CountryDetailInteractor: CountryDetailBusinessLogic, CountryDetailDataStor
 
     // MARK: Do something
 
-    func doSomething(request: CountryDetail.Something.Request) {
-        let response = CountryDetail.Something.Response(country: request.country)
-        presenter?.presentCountrySearchResult(response: response)
+    func getCountryData(request: CountryDetail.CountryDetail.Request) {
+        worker = CountryDetailWorker()
+        guard let flagString = request.country.flags.values.first else { return }
+        worker?.loadCountryImage(from: flagString, completion: { [weak self] image in
+            print("getCountryData begin")
+            if let image = image {
+                let response = CountryDetail.CountryDetail.Response(country: request.country, flag: image)
+                self?.presenter?.presentCountrySearchResult(response: response)
+            }
+        })
     }
 }

@@ -13,7 +13,7 @@
 import UIKit
 
 protocol CountryDetailPresentationLogic {
-    func presentCountrySearchResult(response: CountryDetail.Something.Response)
+    func presentCountrySearchResult(response: CountryDetail.CountryDetail.Response)
 }
 
 class CountryDetailPresenter: CountryDetailPresentationLogic
@@ -22,13 +22,14 @@ class CountryDetailPresenter: CountryDetailPresentationLogic
 
     // MARK: Do something
 
-    func presentCountrySearchResult(response: CountryDetail.Something.Response) {
-        let viewModel: CountryDetail.Something.ViewModel
+    func presentCountrySearchResult(response: CountryDetail.CountryDetail.Response) {
+        let viewModel: CountryDetail.CountryDetail.ViewModel
         let language = "country.base.language".localized + (response.country.languages.values.first ?? "N/A")
         let currency = "country.base.currency".localized + (response.country.currencies.values.first.map { "\($0.name) (\($0.symbol))" } ?? "N/A")
         let code = "country.base.code".localized + response.country.cca2
+        let countryFlag = response.flag
 
-        viewModel = CountryDetail.Something.ViewModel(countryCode: code, language: language, currency: currency)
+        viewModel = CountryDetail.CountryDetail.ViewModel(countryCode: code, language: language, currency: currency, flag: countryFlag)
 
         viewController?.displayCountrySearchResult(viewModel: viewModel)
     }

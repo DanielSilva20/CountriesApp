@@ -33,6 +33,7 @@ struct Country: Decodable {
     let cca2: String
     let languages: [String: String]
     let currencies: [String: Currency]
+    let flags: [String: String]
 
     struct Currency: Decodable {
         let name: String

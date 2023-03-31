@@ -16,18 +16,20 @@ enum CountryDetail
 {
     // MARK: Use cases
 
-    enum Something
+    enum CountryDetail
     {
         struct Request {
             let country: Country
         }
         struct Response {
             let country: Country
+            let flag :UIImage
         }
         struct ViewModel {
             let countryCode: String
             let language: String
             let currency: String
+            let flag: UIImage
         }
     }
 }
