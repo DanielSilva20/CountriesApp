@@ -56,6 +56,7 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
         countryCurrency = UILabel()
         countryLanguage = UILabel()
         countryLanguage.numberOfLines = 2
+        countryLanguage.textAlignment = .center
 
         verticalStackView.addArrangedSubview(countryCode)
         verticalStackView.addArrangedSubview(countryCurrency)

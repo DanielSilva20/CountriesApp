@@ -30,7 +30,6 @@ class CountryDetailPresenter: CountryDetailPresentationLogic
 
         viewModel = CountryDetail.Something.ViewModel(countryCode: code, language: language, currency: currency, isError: false, errorMessage: "")
 
-
         viewController?.displaySomething(viewModel: viewModel)
     }
 }
