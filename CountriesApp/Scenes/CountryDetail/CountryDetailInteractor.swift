@@ -12,30 +12,23 @@
 
 import UIKit
 
-protocol CountryDetailBusinessLogic
-{
-  func doSomething(request: CountryDetail.Something.Request)
+protocol CountryDetailBusinessLogic {
+    func doSomething(request: CountryDetail.Something.Request)
 }
 
-protocol CountryDetailDataStore
-{
+protocol CountryDetailDataStore {
     var country: Country? { get set }
 }
 
-class CountryDetailInteractor: CountryDetailBusinessLogic, CountryDetailDataStore
-{
-  var presenter: CountryDetailPresentationLogic?
-  var worker: CountryDetailWorker?
-  var country: Country?
-  
-  // MARK: Do something
-  
-  func doSomething(request: CountryDetail.Something.Request)
-  {
-    worker = CountryDetailWorker()
-    worker?.doSomeWork()
-    
-    let response = CountryDetail.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
+class CountryDetailInteractor: CountryDetailBusinessLogic, CountryDetailDataStore {
+    var presenter: CountryDetailPresentationLogic?
+    var worker: CountryDetailWorker?
+    var country: Country?
+
+    // MARK: Do something
+
+    func doSomething(request: CountryDetail.Something.Request) {
+        let response = CountryDetail.Something.Response(country: request.country)
+        presenter?.presentCountrySearchResult(response: response)
+    }
 }

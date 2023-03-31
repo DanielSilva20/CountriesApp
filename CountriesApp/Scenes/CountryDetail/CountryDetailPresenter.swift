@@ -12,20 +12,25 @@
 
 import UIKit
 
-protocol CountryDetailPresentationLogic
-{
-  func presentSomething(response: CountryDetail.Something.Response)
+protocol CountryDetailPresentationLogic {
+    func presentCountrySearchResult(response: CountryDetail.Something.Response)
 }
 
 class CountryDetailPresenter: CountryDetailPresentationLogic
 {
-  weak var viewController: CountryDetailDisplayLogic?
-  
-  // MARK: Do something
-  
-  func presentSomething(response: CountryDetail.Something.Response)
-  {
-    let viewModel = CountryDetail.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
-  }
+    weak var viewController: CountryDetailDisplayLogic?
+
+    // MARK: Do something
+
+    func presentCountrySearchResult(response: CountryDetail.Something.Response) {
+        let viewModel: CountryDetail.Something.ViewModel
+        let language = "country.base.language".localized + (response.country.languages.values.first ?? "N/A")
+        let currency = "country.base.currency".localized + (response.country.currencies.values.first.map { "\($0.name) (\($0.symbol))" } ?? "N/A")
+        let code = "country.base.code".localized + response.country.cca2
+
+        viewModel = CountryDetail.Something.ViewModel(countryCode: code, language: language, currency: currency, isError: false, errorMessage: "")
+
+
+        viewController?.displaySomething(viewModel: viewModel)
+    }
 }

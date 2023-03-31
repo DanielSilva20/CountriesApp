@@ -14,18 +14,22 @@ import UIKit
 
 enum CountryDetail
 {
-  // MARK: Use cases
-  
-  enum Something
-  {
-    struct Request
+    // MARK: Use cases
+
+    enum Something
     {
+        struct Request {
+            let country: Country
+        }
+        struct Response {
+            let country: Country
+        }
+        struct ViewModel {
+            let countryCode: String
+            let language: String
+            let currency: String
+            let isError: Bool
+            let errorMessage: String
+        }
     }
-    struct Response
-    {
-    }
-    struct ViewModel
-    {
-    }
-  }
 }

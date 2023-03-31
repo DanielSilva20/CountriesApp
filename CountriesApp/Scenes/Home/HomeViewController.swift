@@ -74,7 +74,6 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         verticalStackView.addArrangedSubview(countryCode)
         verticalStackView.addArrangedSubview(countryCurrency)
         verticalStackView.addArrangedSubview(countryLanguage)
-
     }
 
     private func addViewsToSuperview() {
@@ -114,16 +113,16 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
 
     func displayCountrySearchResult(viewModel: Home.Search.ViewModel) {
         if !viewModel.isError {
-            DispatchQueue.main.async { [weak self] in
-                self?.countryCode.text = viewModel.countryCode
-                self?.countryCurrency.text = viewModel.currency
-                self?.countryLanguage.text = viewModel.language
-                self?.searchTextField.text = ""
-            }
 //            DispatchQueue.main.async { [weak self] in
-//                self?.router?.routeToCountryDetail()
+//                self?.countryCode.text = viewModel.countryCode
+//                self?.countryCurrency.text = viewModel.currency
+//                self?.countryLanguage.text = viewModel.language
 //                self?.searchTextField.text = ""
 //            }
+            DispatchQueue.main.async { [weak self] in
+                self?.router?.routeToCountryDetail()
+                self?.searchTextField.text = ""
+            }
         } else {
             DispatchQueue.main.async { [weak self] in
                 let alert = UIAlertController(title: "Error", message: viewModel.errorMessage, preferredStyle: .alert)

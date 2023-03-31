@@ -20,11 +20,18 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
     var interactor: CountryDetailBusinessLogic?
     var router: (NSObjectProtocol & CountryDetailRoutingLogic & CountryDetailDataPassing)?
 
+    private var verticalStackView: UIStackView!
+
+    private var countryCode: UILabel!
+    private var countryLanguage: UILabel!
+    private var countryCurrency: UILabel!
+
     // MARK: Object lifecycle
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
+        createViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -32,6 +39,42 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
         setup()
     }
 
+    func createViews() {
+        setUpViews()
+        addViewsToSuperview()
+        setUpConstraints()
+    }
+
+    private func setUpViews() {
+        verticalStackView = UIStackView()
+        verticalStackView.axis = .vertical
+        verticalStackView.alignment = .center
+        verticalStackView.distribution = .fill
+        verticalStackView.spacing = 8.0
+
+        countryCode = UILabel()
+        countryCurrency = UILabel()
+        countryLanguage = UILabel()
+        countryLanguage.numberOfLines = 2
+
+        verticalStackView.addArrangedSubview(countryCode)
+        verticalStackView.addArrangedSubview(countryCurrency)
+        verticalStackView.addArrangedSubview(countryLanguage)
+    }
+
+    private func addViewsToSuperview() {
+        view.addSubview(verticalStackView)
+    }
+
+    private func setUpConstraints() {
+        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            verticalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            verticalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
+    
     // MARK: Setup
 
     private func setup() {
@@ -51,20 +94,28 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+//        doSomething()
+        view.backgroundColor = .white
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         doSomething()
-        view.backgroundColor = .red
     }
 
     // MARK: Do something
 
-    //@IBOutlet weak var nameTextField: UITextField!
-
     func doSomething() {
-        let request = CountryDetail.Something.Request()
+        guard let country = router?.dataStore?.country else { return }
+        let request = CountryDetail.Something.Request(country: country)
         interactor?.doSomething(request: request)
     }
 
     func displaySomething(viewModel: CountryDetail.Something.ViewModel) {
-        //nameTextField.text = viewModel.name
+        DispatchQueue.main.async { [weak self] in
+            self?.countryCode.text = viewModel.countryCode
+            self?.countryCurrency.text = viewModel.currency
+            self?.countryLanguage.text = viewModel.language
+        }
     }
 }
