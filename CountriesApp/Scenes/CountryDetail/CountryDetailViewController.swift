@@ -53,11 +53,12 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
         verticalStackView.axis = .vertical
         verticalStackView.alignment = .center
         verticalStackView.distribution = .fill
-        verticalStackView.spacing = 8.0
+        verticalStackView.spacing = 8
 
         countryFlag = UIImage()
         flagView = UIImageView(image: countryFlag)
         flagView.contentMode = .scaleAspectFit
+        flagView.clipsToBounds = true
 
         countryCode = UILabel()
         countryCurrency = UILabel()
@@ -65,22 +66,28 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
         countryLanguage.numberOfLines = 2
         countryLanguage.textAlignment = .center
 
-        verticalStackView.addArrangedSubview(flagView)
         verticalStackView.addArrangedSubview(countryCode)
         verticalStackView.addArrangedSubview(countryCurrency)
         verticalStackView.addArrangedSubview(countryLanguage)
     }
 
     private func addViewsToSuperview() {
+        view.addSubview(flagView)
         view.addSubview(verticalStackView)
     }
 
     private func setUpConstraints() {
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        flagView.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
-            verticalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            verticalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            flagView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
+            flagView.heightAnchor.constraint(equalTo: flagView.widthAnchor),
+            flagView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            flagView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            verticalStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            verticalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
