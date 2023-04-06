@@ -14,6 +14,7 @@ import UIKit
 
 protocol HomePresentationLogic {
     func presentCountrySearchResult(response: Home.Search.Response)
+    func presentAllCountriesResult(response: Home.Countries.Response)
     func presentError(error: Error)
 }
 
@@ -31,6 +32,18 @@ class HomePresenter: HomePresentationLogic {
         }
 
         viewController?.sendCountrySearchResult(viewModel: viewModel)
+    }
+
+    func presentAllCountriesResult(response: Home.Countries.Response) {
+        let viewModel: Home.Countries.ViewModel
+
+        switch response.result {
+        case.success:
+            viewModel = Home.Countries.ViewModel(isError: false, errorMessage: nil)
+        case .failure(let error):
+            viewModel = Home.Countries.ViewModel(isError: true, errorMessage: error.localizedDescription)
+        }
+        viewController?.sendAllCountries(viewModel: viewModel)
     }
 
     func presentError(error: Error) {

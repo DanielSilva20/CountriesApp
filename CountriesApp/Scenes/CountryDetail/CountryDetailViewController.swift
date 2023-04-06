@@ -87,7 +87,9 @@ class CountryDetailViewController: UIViewController, CountryDetailDisplayLogic {
             flagView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
             verticalStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            verticalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            verticalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            verticalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
     

@@ -27,6 +27,20 @@ enum Home {
             let errorMessage: String?
         }
     }
+    enum Countries {
+        struct Request {
+
+        }
+
+        struct Response {
+            let result: Result<[CountryCurrency], Error>
+        }
+
+        struct ViewModel {
+            let isError: Bool
+            let errorMessage: String?
+        }
+    }
 }
 
 struct Country: Decodable {
@@ -34,10 +48,17 @@ struct Country: Decodable {
     let languages: [String: String]
     let currencies: [String: Currency]
     let flags: [String: String]
-
-    struct Currency: Decodable {
-        let name: String
-        let symbol: String
-    }
 }
 
+struct CountryCurrency: Decodable {
+    let name: Name
+}
+
+struct Name: Codable {
+    let common: String
+}
+
+struct Currency: Decodable {
+    let name: String
+    let symbol: String
+}

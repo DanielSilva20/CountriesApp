@@ -28,6 +28,12 @@
 		08C4B30F29D5E4520080270C /* String+localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B30E29D5E4520080270C /* String+localizable.swift */; };
 		08C4B31A29D5E9AD0080270C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08C4B31929D5E9AD0080270C /* Localizable.strings */; };
 		08C4B31C29D722980080270C /* imageNotFound.png in Resources */ = {isa = PBXBuildFile; fileRef = 08C4B31B29D722980080270C /* imageNotFound.png */; };
+		08C4B33929DD8F370080270C /* ChangeCurrencyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B33329DD8F370080270C /* ChangeCurrencyPresenter.swift */; };
+		08C4B33A29DD8F370080270C /* ChangeCurrencyWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B33429DD8F370080270C /* ChangeCurrencyWorker.swift */; };
+		08C4B33B29DD8F370080270C /* ChangeCurrencyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B33529DD8F370080270C /* ChangeCurrencyRouter.swift */; };
+		08C4B33C29DD8F370080270C /* ChangeCurrencyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B33629DD8F370080270C /* ChangeCurrencyModels.swift */; };
+		08C4B33D29DD8F370080270C /* ChangeCurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B33729DD8F370080270C /* ChangeCurrencyViewController.swift */; };
+		08C4B33E29DD8F370080270C /* ChangeCurrencyInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C4B33829DD8F370080270C /* ChangeCurrencyInteractor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +60,12 @@
 		08C4B30E29D5E4520080270C /* String+localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+localizable.swift"; sourceTree = "<group>"; };
 		08C4B31929D5E9AD0080270C /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		08C4B31B29D722980080270C /* imageNotFound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = imageNotFound.png; sourceTree = "<group>"; };
+		08C4B33329DD8F370080270C /* ChangeCurrencyPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCurrencyPresenter.swift; sourceTree = "<group>"; };
+		08C4B33429DD8F370080270C /* ChangeCurrencyWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCurrencyWorker.swift; sourceTree = "<group>"; };
+		08C4B33529DD8F370080270C /* ChangeCurrencyRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCurrencyRouter.swift; sourceTree = "<group>"; };
+		08C4B33629DD8F370080270C /* ChangeCurrencyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCurrencyModels.swift; sourceTree = "<group>"; };
+		08C4B33729DD8F370080270C /* ChangeCurrencyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCurrencyViewController.swift; sourceTree = "<group>"; };
+		08C4B33829DD8F370080270C /* ChangeCurrencyInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCurrencyInteractor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				08C4B30B29D5E3E90080270C /* Resources */,
+				08C4B33229DD8F200080270C /* ChangeCurrency */,
 				08C4B2EC29D48E010080270C /* CountryDetail */,
 				080686F929D3230500075BEF /* Home */,
 			);
@@ -142,6 +155,19 @@
 				08C4B31B29D722980080270C /* imageNotFound.png */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		08C4B33229DD8F200080270C /* ChangeCurrency */ = {
+			isa = PBXGroup;
+			children = (
+				08C4B33329DD8F370080270C /* ChangeCurrencyPresenter.swift */,
+				08C4B33429DD8F370080270C /* ChangeCurrencyWorker.swift */,
+				08C4B33529DD8F370080270C /* ChangeCurrencyRouter.swift */,
+				08C4B33629DD8F370080270C /* ChangeCurrencyModels.swift */,
+				08C4B33729DD8F370080270C /* ChangeCurrencyViewController.swift */,
+				08C4B33829DD8F370080270C /* ChangeCurrencyInteractor.swift */,
+			);
+			path = ChangeCurrency;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,14 +250,20 @@
 				08C4B2F429D48E170080270C /* CountryDetailWorker.swift in Sources */,
 				080686F429D31EA400075BEF /* HomeRouter.swift in Sources */,
 				080686E029D31E1600075BEF /* CountriesApp.xcdatamodeld in Sources */,
+				08C4B33E29DD8F370080270C /* ChangeCurrencyInteractor.swift in Sources */,
 				08C4B2F829D48E170080270C /* CountryDetailInteractor.swift in Sources */,
+				08C4B33D29DD8F370080270C /* ChangeCurrencyViewController.swift in Sources */,
 				080686F629D31EA400075BEF /* HomeViewController.swift in Sources */,
 				080686F229D31EA400075BEF /* HomePresenter.swift in Sources */,
 				08C4B2F529D48E170080270C /* CountryDetailRouter.swift in Sources */,
 				080686F329D31EA400075BEF /* HomeWorker.swift in Sources */,
 				08C4B2F729D48E170080270C /* CountryDetailViewController.swift in Sources */,
 				08C4B2F329D48E170080270C /* CountryDetailPresenter.swift in Sources */,
+				08C4B33C29DD8F370080270C /* ChangeCurrencyModels.swift in Sources */,
+				08C4B33B29DD8F370080270C /* ChangeCurrencyRouter.swift in Sources */,
+				08C4B33929DD8F370080270C /* ChangeCurrencyPresenter.swift in Sources */,
 				08C4B2F629D48E170080270C /* CountryDetailModels.swift in Sources */,
+				08C4B33A29DD8F370080270C /* ChangeCurrencyWorker.swift in Sources */,
 				080686D829D31E1600075BEF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -14,18 +14,21 @@ import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
     func sendCountrySearchResult(viewModel: Home.Search.ViewModel)
+    func sendAllCountries(viewModel: Home.Countries.ViewModel)
 }
 
 class HomeViewController: UIViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
     private var searchTextField: UITextField!
-    private var submitButton: UIButton!
+    private var submitCountryButton: UIButton!
+    private var changeCurrencyButton: UIButton!
     private var verticalStackView: UIStackView!
+    private var horizontalStackView: UIStackView!
 
-    private var countryCode: UILabel!
-    private var countryLanguage: UILabel!
-    private var countryCurrency: UILabel!
+    private var countryAppTitle: UILabel!
+    private var searchCountryTitle: UILabel!
+    private var convertCurrencyTitle: UILabel!
 
     // MARK: Object lifecycle
 
@@ -48,44 +51,81 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     }
 
     private func setUpViews() {
+        countryAppTitle = UILabel()
+        countryAppTitle.text = "home.title".localized
+        countryAppTitle.font = UIFont.boldSystemFont(ofSize: 24)
+        countryAppTitle.textAlignment = .center
+
+        horizontalStackView = UIStackView()
+        horizontalStackView.axis = .horizontal
+        horizontalStackView.spacing = 8
+
         verticalStackView = UIStackView()
         verticalStackView.axis = .vertical
         verticalStackView.alignment = .center
         verticalStackView.distribution = .fill
-        verticalStackView.spacing = 8.0
+        verticalStackView.spacing = 15
+
+        searchCountryTitle = UILabel()
+        searchCountryTitle.text = "home.search.title".localized
+        searchCountryTitle.font = UIFont.boldSystemFont(ofSize: 20)
+        searchCountryTitle.textAlignment = .center
+
+        convertCurrencyTitle = UILabel()
+        convertCurrencyTitle.text = "home.currency.title".localized
+        convertCurrencyTitle.font = UIFont.boldSystemFont(ofSize: 20)
+        convertCurrencyTitle.textAlignment = .center
 
         searchTextField = UITextField()
         searchTextField.borderStyle = .roundedRect
-        searchTextField.placeholder = "Enter a country name"
+        searchTextField.placeholder = "home.search.placeholder.text".localized
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
-        verticalStackView.addArrangedSubview(searchTextField)
 
-        submitButton = UIButton()
-        submitButton.setTitle("Submit", for: .normal)
-        submitButton.setTitleColor(.blue, for: .normal)
-        submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
-        submitButton.translatesAutoresizingMaskIntoConstraints = false
-        verticalStackView.addArrangedSubview(submitButton)
+        submitCountryButton = UIButton()
+        submitCountryButton.setTitle("home.search.button.text".localized, for: .normal)
+        submitCountryButton.setTitleColor(.white, for: .normal)
+        submitCountryButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
+        submitCountryButton.layer.cornerRadius = 5
+        submitCountryButton.backgroundColor = .systemBlue
+        submitCountryButton.addTarget(self, action: #selector(submitCountry), for: .touchUpInside)
+        submitCountryButton.translatesAutoresizingMaskIntoConstraints = false
 
-        countryCode = UILabel()
-        countryCurrency = UILabel()
-        countryLanguage = UILabel()
-
-        verticalStackView.addArrangedSubview(countryCode)
-        verticalStackView.addArrangedSubview(countryCurrency)
-        verticalStackView.addArrangedSubview(countryLanguage)
+        changeCurrencyButton = UIButton()
+        changeCurrencyButton.setTitle("home.currency.button.text".localized, for: .normal)
+        changeCurrencyButton.setTitleColor(.white, for: .normal)
+        changeCurrencyButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
+        changeCurrencyButton.layer.cornerRadius = 5
+        changeCurrencyButton.backgroundColor = .systemBlue
+        changeCurrencyButton.addTarget(self, action: #selector(changeCurrency), for: .touchUpInside)
+        changeCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func addViewsToSuperview() {
+        horizontalStackView.addArrangedSubview(searchTextField)
+        horizontalStackView.addArrangedSubview(submitCountryButton)
+        verticalStackView.addArrangedSubview(searchCountryTitle)
+        verticalStackView.addArrangedSubview(horizontalStackView)
+        verticalStackView.addArrangedSubview(convertCurrencyTitle)
+        verticalStackView.addArrangedSubview(changeCurrencyButton)
+        view.addSubview(countryAppTitle)
         view.addSubview(verticalStackView)
     }
 
     private func setUpConstraints() {
         verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        countryAppTitle.translatesAutoresizingMaskIntoConstraints = false
+        verticalStackView.setCustomSpacing(40, after: horizontalStackView)
+
         NSLayoutConstraint.activate([
+            countryAppTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            countryAppTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
             verticalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             verticalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+
+            horizontalStackView.centerXAnchor.constraint(equalTo: verticalStackView.centerXAnchor),
+            changeCurrencyButton.centerXAnchor.constraint(equalTo: verticalStackView.centerXAnchor),
         ])
     }
 
@@ -128,11 +168,25 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         }
     }
 
-    @objc private func submitButtonTapped() {
+    @objc private func submitCountry() {
         guard let searchText = searchTextField.text else {
             return
         }
         let request = Home.Search.Request(countryName: searchText)
         interactor?.searchCountry(request: request)
+    }
+
+    @objc private func changeCurrency() {
+        interactor?.getAllCountries()
+    }
+
+    func sendAllCountries(viewModel: Home.Countries.ViewModel) {
+        if !viewModel.isError {
+            DispatchQueue.main.async { [weak self] in
+                self?.router?.routeToConvertCurrency()
+            }
+        } else {
+            
+        }
     }
 }

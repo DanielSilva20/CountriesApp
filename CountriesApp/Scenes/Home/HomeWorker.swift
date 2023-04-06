@@ -2,14 +2,14 @@ import Foundation
 
 class HomeWorker {
     private let apiClient = APIClient()
-
+    
     func fetchCountryInfo(countryName: String, completion: @escaping (Result<Country, Error>) -> Void) {
         guard let escapedName = countryName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "https://restcountries.com/v3.1/name/\(escapedName)?fullText=true") else {
             completion(.failure(NetworkError.invalidURL))
             return
         }
-
+        
         apiClient.performRequest(url: url) { (result: Result<[Country], Error>) in
             switch result {
             case .success(let countries):
@@ -23,43 +23,59 @@ class HomeWorker {
             }
         }
     }
-}
-
-// A simple API client to handle network requests
-class APIClient {
-    func performRequest<T: Decodable>(url: URL, completion: @escaping (Result<T, Error>) -> Void) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
+    
+    func fetchAllCountries(completion: @escaping (Result<[CountryCurrency], Error>) -> Void) {
+        guard let url = URL(string: "https://restcountries.com/v3.1/all") else {
+            completion(.failure(NetworkError.invalidURL))
+            return
+        }
+        
+        apiClient.performRequest(url: url) { (result: Result<[CountryCurrency], Error>) in
+            switch result {
+            case .success(let countries):
+                completion(.success(countries))
+            case .failure(let error):
                 completion(.failure(error))
-                return
             }
-
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(.failure(NetworkError.noData))
-                return
-            }
-
-            guard let data = data else {
-                completion(.failure(NetworkError.noData))
-                return
-            }
-
-            // Check for API errors
-            if httpResponse.statusCode == 404 {
-                completion(.failure(APIError.notFound))
-                return
-            }
-
-            do {
-                let decodedObject = try JSONDecoder().decode(T.self, from: data)
-                completion(.success(decodedObject))
-            } catch {
-                completion(.failure(NetworkError.decodingError))
-            }
-        }.resume()
+        }
+    }
+    
+    
+    // A simple API client to handle network requests
+    class APIClient {
+        func performRequest<T: Decodable>(url: URL, completion: @escaping (Result<T, Error>) -> Void) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(NetworkError.noData))
+                    return
+                }
+                
+                guard let data = data else {
+                    completion(.failure(NetworkError.noData))
+                    return
+                }
+                
+                // Check for API errors
+                if httpResponse.statusCode == 404 {
+                    completion(.failure(APIError.notFound))
+                    return
+                }
+                
+                do {
+                    let decodedObject = try JSONDecoder().decode(T.self, from: data)
+                    completion(.success(decodedObject))
+                } catch {
+                    completion(.failure(NetworkError.decodingError))
+                }
+            }.resume()
+        }
     }
 }
-
 enum NetworkError: Error {
     case invalidURL
     case noData
@@ -70,3 +86,4 @@ enum APIError: Error {
     case notFound
     case other(Error)
 }
+

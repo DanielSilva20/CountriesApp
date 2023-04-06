@@ -14,16 +14,19 @@ import UIKit
 
 protocol HomeBusinessLogic {
     func searchCountry(request: Home.Search.Request)
+    func getAllCountries()
 }
 
 protocol HomeDataStore {
     var selectedCountry: Country? { get set }
+    var allCountries: [CountryCurrency]? { get set }
 }
 
 class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var presenter: HomePresentationLogic?
     var worker: HomeWorker?
     var selectedCountry: Country?
+    var allCountries: [CountryCurrency]?
 
     func searchCountry(request: Home.Search.Request) {
         worker = HomeWorker()
@@ -37,5 +40,19 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
                 self?.presenter?.presentError(error: error)
             }
         }
+    }
+
+    func getAllCountries() {
+        worker = HomeWorker()
+        worker?.fetchAllCountries(completion: { [weak self] result in
+            switch result {
+            case .success(let countries):
+                let response = Home.Countries.Response(result: .success(countries))
+                self?.presenter?.presentAllCountriesResult(response: response)
+                self?.allCountries = countries
+            case .failure(let error):
+                self?.presenter?.presentError(error: error)
+            }
+        })
     }
 }

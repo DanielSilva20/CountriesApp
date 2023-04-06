@@ -5,6 +5,14 @@
   Created by Daniel Silva on 30/03/2023.
   
 */
+//Home
+"home.title" = "Countries APP";
+"home.search.title" = "Country search";
+"home.search.placeholder.text" = "Enter a country name";
+"home.search.button.text" = "Submit";
+"home.currency.title" = "Convert your currency";
+"home.currency.button.text" = "Convert currencies";
+
 //Countries
 "country.base.code" = "The country code is: ";
 "country.base.currency" = "The country currency is: ";

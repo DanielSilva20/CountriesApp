@@ -2,6 +2,7 @@ import UIKit
 
 protocol HomeRoutingLogic {
     func routeToCountryDetail()
+    func routeToConvertCurrency()
 }
 
 protocol HomeDataPassing {
@@ -21,6 +22,16 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         passDataToCountryDetail(source: dataStore!, destination: &destinationDS)
 
         viewController.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+
+    func routeToConvertCurrency() {
+
+        guard let viewController = viewController else { return }
+
+        let destinationVC = ChangeCurrencyViewController()
+
+        viewController.navigationController?.pushViewController(destinationVC, animated: true)
+        print("Routing to routeToConvertCurrency()")
     }
 
     private func passDataToCountryDetail(source: HomeDataStore, destination: inout CountryDetailDataStore) {
