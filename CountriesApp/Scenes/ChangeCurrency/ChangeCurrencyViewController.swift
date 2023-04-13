@@ -16,37 +16,44 @@ protocol ChangeCurrencyDisplayLogic: AnyObject {
     func displaySomething(viewModel: ChangeCurrency.Country.ViewModel)
 }
 
-class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic {
+class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic, UIPickerViewDelegate, UIPickerViewDataSource {
     var interactor: ChangeCurrencyBusinessLogic?
     var router: (NSObjectProtocol & ChangeCurrencyRoutingLogic & ChangeCurrencyDataPassing)?
     var pickerView: UIPickerView!
-    var pickerCountries: [String] = []
+    var pickerCountries: [String] = ["USA", "UK", "Japan", "Germany"]
     private var testButton: UIButton!
-    
-    
-    
+    private var fromStackView: UIStackView!
+
     // MARK: Object lifecycle
-    
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
         createViews()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
     func createViews() {
         setUpViews()
         addViewsToSuperview()
         setUpConstraints()
+        pickerView.delegate = self
+        pickerView.dataSource = self
     }
-    
+
     private func setUpViews() {
-        pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 216))
-        
+        fromStackView = UIStackView()
+        fromStackView.axis = .vertical
+        fromStackView.alignment = .center
+        fromStackView.distribution = .fill
+        fromStackView.spacing = 15
+
+        pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+
         testButton = UIButton()
         testButton.setTitle("home.currency.button.text".localized, for: .normal)
         testButton.setTitleColor(.white, for: .normal)
@@ -55,22 +62,31 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         testButton.backgroundColor = .systemBlue
         testButton.addTarget(self, action: #selector(printCountries), for: .touchUpInside)
     }
-    
+
     private func addViewsToSuperview() {
-        view.addSubview(pickerView)
-        view.addSubview(testButton)
+        fromStackView.addArrangedSubview(pickerView)
+        fromStackView.addArrangedSubview(testButton)
+        view.addSubview(fromStackView)
     }
-    
+
     private func setUpConstraints() {
-        testButton.translatesAutoresizingMaskIntoConstraints = false
+        pickerView.translatesAutoresizingMaskIntoConstraints = false
+        fromStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            fromStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            fromStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            fromStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            pickerView.topAnchor.constraint(equalTo: fromStackView.topAnchor),
+            pickerView.widthAnchor.constraint(equalTo: fromStackView.widthAnchor),
+            pickerView.heightAnchor.constraint(equalToConstant: 200), // Set the height of the picker view to 200
+            testButton.topAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: 20),
+            testButton.centerXAnchor.constraint(equalTo: fromStackView.centerXAnchor),
         ])
     }
-    
+
+
     // MARK: Setup
-    
+
     private func setup() {
         let viewController = self
         let interactor = ChangeCurrencyInteractor()
@@ -83,26 +99,39 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         router.viewController = viewController
         router.dataStore = interactor
     }
-    
+
     // MARK: View lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
     }
-    
+
     // MARK: Do something
-    
-    
-    func displaySomething(viewModel: ChangeCurrency.Country.ViewModel) {
-        pickerCountries = viewModel.countryName
-        print("pickerCountries -> \(pickerCountries)")
-        pickerView.reloadAllComponents()
-    }
-    
+
     @objc private func printCountries() {
         guard let countries = router?.dataStore?.countries else { return }
         let request = ChangeCurrency.Country.Request(countries: countries)
         interactor?.doSomething(request: request)
     }
+
+    func displaySomething(viewModel: ChangeCurrency.Country.ViewModel) {
+        pickerCountries = viewModel.countryName
+        print("pickerCountries -> \(pickerCountries)")
+        pickerView.reloadAllComponents()
+        pickerView.reloadInputViews()
+    }
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerCountries.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerCountries[row]
+    }
+
 }
