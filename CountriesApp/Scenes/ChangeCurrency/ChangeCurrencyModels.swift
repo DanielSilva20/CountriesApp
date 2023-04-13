@@ -16,16 +16,16 @@ enum ChangeCurrency
 {
   // MARK: Use cases
   
-  enum Something
+  enum Country
   {
-    struct Request
-    {
-    }
-    struct Response
-    {
-    }
-    struct ViewModel
-    {
-    }
+      struct Request {
+          let countries: [CountryCurrency]
+      }
+      struct Response {
+          let countries: [CountryCurrency]
+      }
+      struct ViewModel {
+          let countryName: [String]
+      }
   }
 }

@@ -38,10 +38,11 @@ class HomePresenter: HomePresentationLogic {
         let viewModel: Home.Countries.ViewModel
 
         switch response.result {
-        case.success:
-            viewModel = Home.Countries.ViewModel(isError: false, errorMessage: nil)
+        case.success(let countries):
+            let countryNames : [String] = countries.map{ $0.name.common }
+            viewModel = Home.Countries.ViewModel(allCountryNames: countryNames, isError: false, errorMessage: nil)
         case .failure(let error):
-            viewModel = Home.Countries.ViewModel(isError: true, errorMessage: error.localizedDescription)
+            viewModel = Home.Countries.ViewModel(allCountryNames: nil, isError: true, errorMessage: error.localizedDescription)
         }
         viewController?.sendAllCountries(viewModel: viewModel)
     }

@@ -37,6 +37,7 @@ enum Home {
         }
 
         struct ViewModel {
+            let allCountryNames: [String]?
             let isError: Bool
             let errorMessage: String?
         }
@@ -52,6 +53,7 @@ struct Country: Decodable {
 
 struct CountryCurrency: Decodable {
     let name: Name
+//    let currencies: [String: Currency]
 }
 
 struct Name: Codable {

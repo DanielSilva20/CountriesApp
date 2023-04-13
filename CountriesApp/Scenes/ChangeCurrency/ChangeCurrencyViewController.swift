@@ -12,79 +12,97 @@
 
 import UIKit
 
-protocol ChangeCurrencyDisplayLogic: class
-{
-  func displaySomething(viewModel: ChangeCurrency.Something.ViewModel)
+protocol ChangeCurrencyDisplayLogic: AnyObject {
+    func displaySomething(viewModel: ChangeCurrency.Country.ViewModel)
 }
 
-class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
-{
-  var interactor: ChangeCurrencyBusinessLogic?
-  var router: (NSObjectProtocol & ChangeCurrencyRoutingLogic & ChangeCurrencyDataPassing)?
-
-  // MARK: Object lifecycle
-  
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-  {
-    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    setup()
-  }
-  
-  required init?(coder aDecoder: NSCoder)
-  {
-    super.init(coder: aDecoder)
-    setup()
-  }
-  
-  // MARK: Setup
-  
-  private func setup()
-  {
-    let viewController = self
-    let interactor = ChangeCurrencyInteractor()
-    let presenter = ChangeCurrencyPresenter()
-    let router = ChangeCurrencyRouter()
-    viewController.interactor = interactor
-    viewController.router = router
-    interactor.presenter = presenter
-    presenter.viewController = viewController
-    router.viewController = viewController
-    router.dataStore = interactor
-  }
-  
-  // MARK: Routing
-  
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-  {
-    if let scene = segue.identifier {
-      let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-      if let router = router, router.responds(to: selector) {
-        router.perform(selector, with: segue)
-      }
+class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic {
+    var interactor: ChangeCurrencyBusinessLogic?
+    var router: (NSObjectProtocol & ChangeCurrencyRoutingLogic & ChangeCurrencyDataPassing)?
+    var pickerView: UIPickerView!
+    var pickerCountries: [String] = []
+    private var testButton: UIButton!
+    
+    
+    
+    // MARK: Object lifecycle
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+        createViews()
     }
-  }
-  
-  // MARK: View lifecycle
-  
-  override func viewDidLoad()
-  {
-    super.viewDidLoad()
-    doSomething()
-      view.backgroundColor = .red
-  }
-  
-  // MARK: Do something
-  
-  //@IBOutlet weak var nameTextField: UITextField!
-  
-  func doSomething()
-  {
-    let request = ChangeCurrency.Something.Request()
-    interactor?.doSomething(request: request)
-  }
-  
-  func displaySomething(viewModel: ChangeCurrency.Something.ViewModel)
-  {
-    //nameTextField.text = viewModel.name
-  }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    func createViews() {
+        setUpViews()
+        addViewsToSuperview()
+        setUpConstraints()
+    }
+    
+    private func setUpViews() {
+        pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 216))
+        
+        testButton = UIButton()
+        testButton.setTitle("home.currency.button.text".localized, for: .normal)
+        testButton.setTitleColor(.white, for: .normal)
+        testButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
+        testButton.layer.cornerRadius = 5
+        testButton.backgroundColor = .systemBlue
+        testButton.addTarget(self, action: #selector(printCountries), for: .touchUpInside)
+    }
+    
+    private func addViewsToSuperview() {
+        view.addSubview(pickerView)
+        view.addSubview(testButton)
+    }
+    
+    private func setUpConstraints() {
+        testButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+    }
+    
+    // MARK: Setup
+    
+    private func setup() {
+        let viewController = self
+        let interactor = ChangeCurrencyInteractor()
+        let presenter = ChangeCurrencyPresenter()
+        let router = ChangeCurrencyRouter()
+        viewController.interactor = interactor
+        viewController.router = router
+        interactor.presenter = presenter
+        presenter.viewController = viewController
+        router.viewController = viewController
+        router.dataStore = interactor
+    }
+    
+    // MARK: View lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+    }
+    
+    // MARK: Do something
+    
+    
+    func displaySomething(viewModel: ChangeCurrency.Country.ViewModel) {
+        pickerCountries = viewModel.countryName
+        print("pickerCountries -> \(pickerCountries)")
+        pickerView.reloadAllComponents()
+    }
+    
+    @objc private func printCountries() {
+        guard let countries = router?.dataStore?.countries else { return }
+        let request = ChangeCurrency.Country.Request(countries: countries)
+        interactor?.doSomething(request: request)
+    }
 }

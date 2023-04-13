@@ -12,20 +12,21 @@
 
 import UIKit
 
-protocol ChangeCurrencyPresentationLogic
-{
-  func presentSomething(response: ChangeCurrency.Something.Response)
+protocol ChangeCurrencyPresentationLogic {
+    func presentSomething(response: ChangeCurrency.Country.Response)
 }
 
-class ChangeCurrencyPresenter: ChangeCurrencyPresentationLogic
-{
-  weak var viewController: ChangeCurrencyDisplayLogic?
-  
-  // MARK: Do something
-  
-  func presentSomething(response: ChangeCurrency.Something.Response)
-  {
-    let viewModel = ChangeCurrency.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
-  }
+class ChangeCurrencyPresenter: ChangeCurrencyPresentationLogic {
+    weak var viewController: ChangeCurrencyDisplayLogic?
+
+    // MARK: Do something
+
+    func presentSomething(response: ChangeCurrency.Country.Response) {
+        let countriesName : [String] = response.countries.map { country in
+            country.name.common
+        }
+        let viewModel = ChangeCurrency.Country.ViewModel(countryName: countriesName)
+
+        viewController?.displaySomething(viewModel: viewModel)
+    }
 }

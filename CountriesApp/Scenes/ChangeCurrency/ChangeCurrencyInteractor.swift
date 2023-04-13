@@ -12,30 +12,23 @@
 
 import UIKit
 
-protocol ChangeCurrencyBusinessLogic
-{
-  func doSomething(request: ChangeCurrency.Something.Request)
+protocol ChangeCurrencyBusinessLogic {
+    func doSomething(request: ChangeCurrency.Country.Request)
 }
 
-protocol ChangeCurrencyDataStore
-{
-  //var name: String { get set }
+protocol ChangeCurrencyDataStore {
+    var countries: [CountryCurrency]? { get set }
 }
 
-class ChangeCurrencyInteractor: ChangeCurrencyBusinessLogic, ChangeCurrencyDataStore
-{
-  var presenter: ChangeCurrencyPresentationLogic?
-  var worker: ChangeCurrencyWorker?
-  //var name: String = ""
-  
-  // MARK: Do something
-  
-  func doSomething(request: ChangeCurrency.Something.Request)
-  {
-    worker = ChangeCurrencyWorker()
-    worker?.doSomeWork()
-    
-    let response = ChangeCurrency.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
+class ChangeCurrencyInteractor: ChangeCurrencyBusinessLogic, ChangeCurrencyDataStore {
+    var countries: [CountryCurrency]?
+    var presenter: ChangeCurrencyPresentationLogic?
+    var worker: ChangeCurrencyWorker?
+
+    // MARK: Do something
+
+    func doSomething(request: ChangeCurrency.Country.Request) {
+        let response = ChangeCurrency.Country.Response(countries: request.countries)
+        presenter?.presentSomething(response: response)
+    }
 }

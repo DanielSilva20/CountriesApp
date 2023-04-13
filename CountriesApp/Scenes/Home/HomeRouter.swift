@@ -29,13 +29,20 @@ class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         guard let viewController = viewController else { return }
 
         let destinationVC = ChangeCurrencyViewController()
+        var destinationDS = destinationVC.router!.dataStore!
+
+        passDataToChangeCurrency(source: dataStore!, destination: &destinationDS)
 
         viewController.navigationController?.pushViewController(destinationVC, animated: true)
-        print("Routing to routeToConvertCurrency()")
     }
 
     private func passDataToCountryDetail(source: HomeDataStore, destination: inout CountryDetailDataStore) {
         guard let selectedCountry = source.selectedCountry else { return }
         destination.country = selectedCountry
+    }
+
+    private func passDataToChangeCurrency(source: HomeDataStore, destination: inout ChangeCurrencyDataStore) {
+        guard let countries = source.allCountries else { return }
+        destination.countries = countries
     }
 }
