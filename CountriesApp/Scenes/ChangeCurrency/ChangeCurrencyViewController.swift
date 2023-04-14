@@ -19,9 +19,12 @@ protocol ChangeCurrencyDisplayLogic: AnyObject {
 class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic, UIPickerViewDelegate, UIPickerViewDataSource {
     var interactor: ChangeCurrencyBusinessLogic?
     var router: (NSObjectProtocol & ChangeCurrencyRoutingLogic & ChangeCurrencyDataPassing)?
-    var pickerView: UIPickerView!
-    var pickerCountries: [String] = ["USA", "UK", "Japan", "Germany"]
+    var fromPickerView: UIPickerView!
+    var toPickerView: UIPickerView!
+    var pickerCountries: [String] = []
+    private var toStackView: UIStackView!
     private var fromStackView: UIStackView!
+    private var horizontalStackView: UIStackView!
 
     // MARK: Object lifecycle
 
@@ -39,35 +42,60 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         setUpViews()
         addViewsToSuperview()
         setUpConstraints()
-        pickerView.delegate = self
-        pickerView.dataSource = self
+        fromPickerView.delegate = self
+        fromPickerView.dataSource = self
+        toPickerView.delegate = self
+        toPickerView.dataSource = self
     }
 
     private func setUpViews() {
         fromStackView = UIStackView()
         fromStackView.axis = .vertical
         fromStackView.alignment = .center
-        fromStackView.distribution = .fill
+        fromStackView.distribution = .fillEqually
         fromStackView.spacing = 15
 
-        pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+        toStackView = UIStackView()
+        toStackView.axis = .vertical
+        toStackView.alignment = .center
+        toStackView.distribution = .fillEqually
+        toStackView.spacing = 15
+
+        horizontalStackView = UIStackView()
+        toStackView.axis = .horizontal
+        toStackView.distribution = .fill
+        toStackView.spacing = 15
+
+        fromPickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+        toPickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
     }
 
     private func addViewsToSuperview() {
-        fromStackView.addArrangedSubview(pickerView)
-        view.addSubview(fromStackView)
+        fromStackView.addArrangedSubview(fromPickerView)
+        toStackView.addArrangedSubview(toPickerView)
+        horizontalStackView.addArrangedSubview(fromStackView)
+        horizontalStackView.addArrangedSubview(toStackView)
+        view.addSubview(horizontalStackView)
     }
 
     private func setUpConstraints() {
-        pickerView.translatesAutoresizingMaskIntoConstraints = false
+        fromPickerView.translatesAutoresizingMaskIntoConstraints = false
         fromStackView.translatesAutoresizingMaskIntoConstraints = false
+        toPickerView.translatesAutoresizingMaskIntoConstraints = false
+        toStackView.translatesAutoresizingMaskIntoConstraints = false
+        horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            fromStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            fromStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            fromStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pickerView.topAnchor.constraint(equalTo: fromStackView.topAnchor),
-            pickerView.widthAnchor.constraint(equalTo: fromStackView.widthAnchor),
-            pickerView.heightAnchor.constraint(equalToConstant: 200),
+            horizontalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            horizontalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            horizontalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            fromStackView.leadingAnchor.constraint(equalTo: horizontalStackView.leadingAnchor),
+            toStackView.trailingAnchor.constraint(equalTo: horizontalStackView.trailingAnchor),
+            fromPickerView.topAnchor.constraint(equalTo: fromStackView.topAnchor),
+            fromPickerView.widthAnchor.constraint(equalTo: fromStackView.widthAnchor),
+            toPickerView.topAnchor.constraint(equalTo: toStackView.topAnchor),
+            toPickerView.widthAnchor.constraint(equalTo: toStackView.widthAnchor),
+            fromPickerView.widthAnchor.constraint(equalTo: toPickerView.widthAnchor),
+
         ])
     }
 
@@ -108,8 +136,8 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
     func displaySomething(viewModel: ChangeCurrency.Country.ViewModel) {
         pickerCountries = viewModel.countryName
         print("pickerCountries -> \(pickerCountries)")
-        pickerView.reloadAllComponents()
-        pickerView.reloadInputViews()
+        fromPickerView.reloadAllComponents()
+        toPickerView.reloadAllComponents()
     }
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
