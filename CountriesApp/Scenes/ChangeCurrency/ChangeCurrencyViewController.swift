@@ -21,7 +21,6 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
     var router: (NSObjectProtocol & ChangeCurrencyRoutingLogic & ChangeCurrencyDataPassing)?
     var pickerView: UIPickerView!
     var pickerCountries: [String] = ["USA", "UK", "Japan", "Germany"]
-    private var testButton: UIButton!
     private var fromStackView: UIStackView!
 
     // MARK: Object lifecycle
@@ -29,7 +28,6 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
-        createViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -53,19 +51,10 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         fromStackView.spacing = 15
 
         pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
-
-        testButton = UIButton()
-        testButton.setTitle("home.currency.button.text".localized, for: .normal)
-        testButton.setTitleColor(.white, for: .normal)
-        testButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
-        testButton.layer.cornerRadius = 5
-        testButton.backgroundColor = .systemBlue
-        testButton.addTarget(self, action: #selector(printCountries), for: .touchUpInside)
     }
 
     private func addViewsToSuperview() {
         fromStackView.addArrangedSubview(pickerView)
-        fromStackView.addArrangedSubview(testButton)
         view.addSubview(fromStackView)
     }
 
@@ -78,9 +67,7 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
             fromStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             pickerView.topAnchor.constraint(equalTo: fromStackView.topAnchor),
             pickerView.widthAnchor.constraint(equalTo: fromStackView.widthAnchor),
-            pickerView.heightAnchor.constraint(equalToConstant: 200), // Set the height of the picker view to 200
-            testButton.topAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: 20),
-            testButton.centerXAnchor.constraint(equalTo: fromStackView.centerXAnchor),
+            pickerView.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
 
@@ -107,9 +94,12 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         view.backgroundColor = .white
     }
 
-    // MARK: Do something
+    override func viewWillAppear(_ animated: Bool) {
+        createViews()
+        showCountriesPicker()
+    }
 
-    @objc private func printCountries() {
+    func showCountriesPicker() {
         guard let countries = router?.dataStore?.countries else { return }
         let request = ChangeCurrency.Country.Request(countries: countries)
         interactor?.doSomething(request: request)

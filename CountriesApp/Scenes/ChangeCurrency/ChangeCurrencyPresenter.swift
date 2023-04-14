@@ -25,7 +25,7 @@ class ChangeCurrencyPresenter: ChangeCurrencyPresentationLogic {
         let countriesName : [String] = response.countries.map { country in
             country.name.common
         }
-        let viewModel = ChangeCurrency.Country.ViewModel(countryName: countriesName)
+        let viewModel = ChangeCurrency.Country.ViewModel(countryName: countriesName.sorted())
 
         viewController?.displaySomething(viewModel: viewModel)
     }
