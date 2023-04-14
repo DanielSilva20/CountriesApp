@@ -19,25 +19,34 @@ protocol ChangeCurrencyDisplayLogic: AnyObject {
 class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic, UIPickerViewDelegate, UIPickerViewDataSource {
     var interactor: ChangeCurrencyBusinessLogic?
     var router: (NSObjectProtocol & ChangeCurrencyRoutingLogic & ChangeCurrencyDataPassing)?
-    var fromPickerView: UIPickerView!
-    var toPickerView: UIPickerView!
-    var pickerCountries: [String] = []
-    private var toStackView: UIStackView!
+    private var fromPickerView: UIPickerView!
+    private var toPickerView: UIPickerView!
+    private var pickerCountries: [String] = []
     private var fromStackView: UIStackView!
+    private var toStackView: UIStackView!
     private var horizontalStackView: UIStackView!
+    
+    private var fromCurrency: UITextField!
+    private var toCurrency: UILabel!
 
+    private var convertCurrencyButton: UIButton!
+
+    private var currencyViewTitle: UILabel!
+    private var countriesTitle: UILabel!
+    private var amountsTitle: UILabel!
+    
     // MARK: Object lifecycle
-
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-
+    
     func createViews() {
         setUpViews()
         addViewsToSuperview()
@@ -47,44 +56,93 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         toPickerView.delegate = self
         toPickerView.dataSource = self
     }
-
+    
     private func setUpViews() {
+        currencyViewTitle = UILabel()
+        currencyViewTitle.text = "currency.title".localized
+        currencyViewTitle.font = UIFont.boldSystemFont(ofSize: 24)
+        currencyViewTitle.textAlignment = .center
+
         fromStackView = UIStackView()
         fromStackView.axis = .vertical
         fromStackView.alignment = .center
-        fromStackView.distribution = .fillEqually
         fromStackView.spacing = 15
-
+        
         toStackView = UIStackView()
         toStackView.axis = .vertical
         toStackView.alignment = .center
-        toStackView.distribution = .fillEqually
         toStackView.spacing = 15
-
+        
         horizontalStackView = UIStackView()
-        toStackView.axis = .horizontal
-        toStackView.distribution = .fill
-        toStackView.spacing = 15
+        horizontalStackView.axis = .horizontal
+        horizontalStackView.distribution = .fill
+        horizontalStackView.spacing = 15
 
-        fromPickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
-        toPickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
+        countriesTitle = UILabel()
+        countriesTitle.text = "currency.countries.title".localized
+        countriesTitle.font = UIFont.boldSystemFont(ofSize: 24)
+        countriesTitle.textAlignment = .center
+
+        fromPickerView = UIPickerView()
+        toPickerView = UIPickerView()
+
+        fromCurrency = UITextField()
+        fromCurrency.borderStyle = .roundedRect
+        fromCurrency.placeholder = "currency.from.search.text".localized
+        fromCurrency.textAlignment = .center
+        fromCurrency.layer.cornerRadius = 5
+        fromCurrency.layer.borderWidth = 0.5
+        fromCurrency.layer.borderColor = UIColor.lightGray.cgColor
+
+        toCurrency = UILabel()
+        toCurrency.backgroundColor = .white
+        toCurrency.layer.cornerRadius = 5
+        toCurrency.layer.borderWidth = 0.5
+        toCurrency.layer.borderColor = UIColor.lightGray.cgColor
+        toCurrency.text = ""
+        toCurrency.textAlignment = .center
+
+        amountsTitle = UILabel()
+        amountsTitle.text = "currency.amounts.title".localized
+        amountsTitle.font = UIFont.boldSystemFont(ofSize: 24)
+        amountsTitle.textAlignment = .center
+
+        convertCurrencyButton = UIButton()
+        convertCurrencyButton.setTitle("currency.button.text".localized, for: .normal)
+        convertCurrencyButton.setTitleColor(.white, for: .normal)
+        convertCurrencyButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
+        convertCurrencyButton.layer.cornerRadius = 5
+        convertCurrencyButton.backgroundColor = .systemBlue
+        convertCurrencyButton.addTarget(self, action: #selector(convertCurrency), for: .touchUpInside)
+        convertCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
     }
-
+    
     private func addViewsToSuperview() {
+        view.addSubview(currencyViewTitle)
         fromStackView.addArrangedSubview(fromPickerView)
+        fromStackView.addArrangedSubview(fromCurrency)
         toStackView.addArrangedSubview(toPickerView)
+        toStackView.addArrangedSubview(toCurrency)
         horizontalStackView.addArrangedSubview(fromStackView)
         horizontalStackView.addArrangedSubview(toStackView)
         view.addSubview(horizontalStackView)
+        view.addSubview(convertCurrencyButton)
     }
-
+    
     private func setUpConstraints() {
         fromPickerView.translatesAutoresizingMaskIntoConstraints = false
         fromStackView.translatesAutoresizingMaskIntoConstraints = false
         toPickerView.translatesAutoresizingMaskIntoConstraints = false
         toStackView.translatesAutoresizingMaskIntoConstraints = false
         horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
+        fromCurrency.translatesAutoresizingMaskIntoConstraints = false
+        convertCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
+        currencyViewTitle.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
+            currencyViewTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            currencyViewTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
             horizontalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             horizontalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             horizontalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -96,12 +154,25 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
             toPickerView.widthAnchor.constraint(equalTo: toStackView.widthAnchor),
             fromPickerView.widthAnchor.constraint(equalTo: toPickerView.widthAnchor),
 
+            fromCurrency.leadingAnchor.constraint(equalTo: fromStackView.leadingAnchor, constant: 16),
+            fromCurrency.trailingAnchor.constraint(equalTo: fromStackView.trailingAnchor, constant: -16),
+            fromCurrency.heightAnchor.constraint(equalToConstant: 40),
+
+            toCurrency.leadingAnchor.constraint(equalTo: toStackView.leadingAnchor, constant: 16),
+            toCurrency.trailingAnchor.constraint(equalTo: toStackView.trailingAnchor, constant: -16),
+            toCurrency.heightAnchor.constraint(equalToConstant: 40),
+
+            fromStackView.heightAnchor.constraint(equalToConstant: 200),
+            toStackView.heightAnchor.constraint(equalToConstant: 200),
+
+            convertCurrencyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            convertCurrencyButton.topAnchor.constraint(equalTo: horizontalStackView.bottomAnchor, constant: 40),
         ])
     }
-
-
+    
+    
     // MARK: Setup
-
+    
     private func setup() {
         let viewController = self
         let interactor = ChangeCurrencyInteractor()
@@ -114,25 +185,25 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         router.viewController = viewController
         router.dataStore = interactor
     }
-
+    
     // MARK: View lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         createViews()
         showCountriesPicker()
     }
-
+    
     func showCountriesPicker() {
         guard let countries = router?.dataStore?.countries else { return }
         let request = ChangeCurrency.Country.Request(countries: countries)
         interactor?.doSomething(request: request)
     }
-
+    
     func displaySomething(viewModel: ChangeCurrency.Country.ViewModel) {
         pickerCountries = viewModel.countryName
         print("pickerCountries -> \(pickerCountries)")
@@ -140,16 +211,26 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         toPickerView.reloadAllComponents()
     }
 
+    @objc private func convertCurrency() {
+        let fromCurrencyCountry = pickerCountries[fromPickerView.selectedRow(inComponent: 0)]
+        let toCurrencyCountry = pickerCountries[toPickerView.selectedRow(inComponent: 0)]
+        let fromSearchText = fromCurrency.text ?? ""
+
+        print("From currency: \(fromCurrencyCountry)")
+        print("To currency: \(toCurrencyCountry)")
+        print("From search text: \(fromSearchText)")
+    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerCountries.count
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerCountries[row]
     }
-
+    
 }

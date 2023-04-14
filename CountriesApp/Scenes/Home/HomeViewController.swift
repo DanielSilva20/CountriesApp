@@ -22,7 +22,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
     private var searchTextField: UITextField!
     private var submitCountryButton: UIButton!
-    private var changeCurrencyButton: UIButton!
+    private var convertCurrencyButton: UIButton!
     private var verticalStackView: UIStackView!
     private var horizontalStackView: UIStackView!
 
@@ -90,14 +90,14 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         submitCountryButton.addTarget(self, action: #selector(submitCountry), for: .touchUpInside)
         submitCountryButton.translatesAutoresizingMaskIntoConstraints = false
 
-        changeCurrencyButton = UIButton()
-        changeCurrencyButton.setTitle("home.currency.button.text".localized, for: .normal)
-        changeCurrencyButton.setTitleColor(.white, for: .normal)
-        changeCurrencyButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
-        changeCurrencyButton.layer.cornerRadius = 5
-        changeCurrencyButton.backgroundColor = .systemBlue
-        changeCurrencyButton.addTarget(self, action: #selector(changeCurrency), for: .touchUpInside)
-        changeCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
+        convertCurrencyButton = UIButton()
+        convertCurrencyButton.setTitle("home.currency.button.text".localized, for: .normal)
+        convertCurrencyButton.setTitleColor(.white, for: .normal)
+        convertCurrencyButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
+        convertCurrencyButton.layer.cornerRadius = 5
+        convertCurrencyButton.backgroundColor = .systemBlue
+        convertCurrencyButton.addTarget(self, action: #selector(changeCurrency), for: .touchUpInside)
+        convertCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func addViewsToSuperview() {
@@ -106,7 +106,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         verticalStackView.addArrangedSubview(searchCountryTitle)
         verticalStackView.addArrangedSubview(horizontalStackView)
         verticalStackView.addArrangedSubview(convertCurrencyTitle)
-        verticalStackView.addArrangedSubview(changeCurrencyButton)
+        verticalStackView.addArrangedSubview(convertCurrencyButton)
         view.addSubview(countryAppTitle)
         view.addSubview(verticalStackView)
     }
@@ -125,7 +125,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
             verticalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
             horizontalStackView.centerXAnchor.constraint(equalTo: verticalStackView.centerXAnchor),
-            changeCurrencyButton.centerXAnchor.constraint(equalTo: verticalStackView.centerXAnchor),
+            convertCurrencyButton.centerXAnchor.constraint(equalTo: verticalStackView.centerXAnchor),
         ])
     }
 

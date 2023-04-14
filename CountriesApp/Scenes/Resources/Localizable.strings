@@ -18,6 +18,13 @@
 "country.base.currency" = "The country currency is: ";
 "country.base.language" = "The principal language of the country is: ";
 
+//Currencies
+"currency.from.search.text" = "amount to convert";
+"currency.button.text" = "Convert";
+"currency.title" = "Currency Convert";
+"currency.countries.title" = "From which country and to which country do you want to convert?";
+"currency.amounts.title" = "Choose the amount to convert:";
+
 //Errors
 "error.network.url" = "Invalid URL";
 "error.network.noData" = "No data received";
