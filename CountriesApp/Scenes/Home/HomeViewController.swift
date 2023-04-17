@@ -11,6 +11,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol HomeDisplayLogic: AnyObject {
     func sendCountrySearchResult(viewModel: Home.Search.ViewModel)
@@ -30,6 +32,9 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     private var searchCountryTitle: UILabel!
     private var convertCurrencyTitle: UILabel!
 
+    private let didTapSubmitCountry = PublishRelay<Void>()
+    let disposeBag = DisposeBag()
+
     // MARK: Object lifecycle
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -48,6 +53,10 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         setUpViews()
         addViewsToSuperview()
         setUpConstraints()
+
+        submitCountryButton.rx.tap
+            .bind(to: didTapSubmitCountry)
+            .disposed(by: disposeBag)
     }
 
     private func setUpViews() {
@@ -87,7 +96,6 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         submitCountryButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
         submitCountryButton.layer.cornerRadius = 5
         submitCountryButton.backgroundColor = .systemBlue
-        submitCountryButton.addTarget(self, action: #selector(submitCountry), for: .touchUpInside)
         submitCountryButton.translatesAutoresizingMaskIntoConstraints = false
 
         convertCurrencyButton = UIButton()
@@ -147,6 +155,13 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        didTapSubmitCountry.subscribe(onNext: { [weak self] in
+            guard let searchText = self?.searchTextField.text else {
+                return
+            }
+            let request = Home.Search.Request(countryName: searchText)
+            self?.interactor?.searchCountry(request: request)
+        }).disposed(by: disposeBag)
     }
 
     // MARK: Do something
@@ -168,13 +183,13 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         }
     }
 
-    @objc private func submitCountry() {
-        guard let searchText = searchTextField.text else {
-            return
-        }
-        let request = Home.Search.Request(countryName: searchText)
-        interactor?.searchCountry(request: request)
-    }
+//    @objc private func submitCountry() {
+//        guard let searchText = searchTextField.text else {
+//            return
+//        }
+//        let request = Home.Search.Request(countryName: searchText)
+//        interactor?.searchCountry(request: request)
+//    }
 
     @objc private func changeCurrency() {
         interactor?.getAllCountries()
