@@ -22,9 +22,8 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
     private var fromPickerView: UIPickerView!
     private var toPickerView: UIPickerView!
     private var pickerCountries: [String] = []
-    private var fromStackView: UIStackView!
-    private var toStackView: UIStackView!
-    private var horizontalStackView: UIStackView!
+    private var countriesStackView: UIStackView!
+    private var amountsStackView: UIStackView!
     
     private var fromCurrency: UITextField!
     private var toCurrency: UILabel!
@@ -63,24 +62,21 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
         currencyViewTitle.font = UIFont.boldSystemFont(ofSize: 24)
         currencyViewTitle.textAlignment = .center
 
-        fromStackView = UIStackView()
-        fromStackView.axis = .vertical
-        fromStackView.alignment = .center
-        fromStackView.spacing = 15
+        countriesStackView = UIStackView()
+        countriesStackView.axis = .horizontal
+        countriesStackView.alignment = .fill
+        countriesStackView.distribution = .fillEqually
+        countriesStackView.spacing = 15
         
-        toStackView = UIStackView()
-        toStackView.axis = .vertical
-        toStackView.alignment = .center
-        toStackView.spacing = 15
-        
-        horizontalStackView = UIStackView()
-        horizontalStackView.axis = .horizontal
-        horizontalStackView.distribution = .fill
-        horizontalStackView.spacing = 15
+        amountsStackView = UIStackView()
+        amountsStackView.axis = .horizontal
+        amountsStackView.distribution = .fill
+        countriesStackView.distribution = .fillEqually
+        amountsStackView.spacing = 15
 
         countriesTitle = UILabel()
         countriesTitle.text = "currency.countries.title".localized
-        countriesTitle.font = UIFont.boldSystemFont(ofSize: 24)
+        countriesTitle.font = UIFont.boldSystemFont(ofSize: 20)
         countriesTitle.textAlignment = .center
 
         fromPickerView = UIPickerView()
@@ -104,7 +100,7 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
 
         amountsTitle = UILabel()
         amountsTitle.text = "currency.amounts.title".localized
-        amountsTitle.font = UIFont.boldSystemFont(ofSize: 24)
+        amountsTitle.font = UIFont.boldSystemFont(ofSize: 20)
         amountsTitle.textAlignment = .center
 
         convertCurrencyButton = UIButton()
@@ -119,54 +115,49 @@ class ChangeCurrencyViewController: UIViewController, ChangeCurrencyDisplayLogic
     
     private func addViewsToSuperview() {
         view.addSubview(currencyViewTitle)
-        fromStackView.addArrangedSubview(fromPickerView)
-        fromStackView.addArrangedSubview(fromCurrency)
-        toStackView.addArrangedSubview(toPickerView)
-        toStackView.addArrangedSubview(toCurrency)
-        horizontalStackView.addArrangedSubview(fromStackView)
-        horizontalStackView.addArrangedSubview(toStackView)
-        view.addSubview(horizontalStackView)
+//        view.addSubview(countriesTitle)
+        countriesStackView.addArrangedSubview(fromPickerView)
+        countriesStackView.addArrangedSubview(toPickerView)
+        view.addSubview(countriesStackView)
+        view.addSubview(amountsTitle)
+        amountsStackView.addArrangedSubview(fromCurrency)
+        amountsStackView.addArrangedSubview(toCurrency)
+        view.addSubview(amountsStackView)
         view.addSubview(convertCurrencyButton)
     }
     
     private func setUpConstraints() {
         fromPickerView.translatesAutoresizingMaskIntoConstraints = false
-        fromStackView.translatesAutoresizingMaskIntoConstraints = false
+        countriesStackView.translatesAutoresizingMaskIntoConstraints = false
         toPickerView.translatesAutoresizingMaskIntoConstraints = false
-        toStackView.translatesAutoresizingMaskIntoConstraints = false
-        horizontalStackView.translatesAutoresizingMaskIntoConstraints = false
+        amountsStackView.translatesAutoresizingMaskIntoConstraints = false
         fromCurrency.translatesAutoresizingMaskIntoConstraints = false
+        toCurrency.translatesAutoresizingMaskIntoConstraints = false
         convertCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
         currencyViewTitle.translatesAutoresizingMaskIntoConstraints = false
+        countriesTitle.translatesAutoresizingMaskIntoConstraints = false
+        amountsTitle.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             currencyViewTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             currencyViewTitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            horizontalStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            horizontalStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            horizontalStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            fromStackView.leadingAnchor.constraint(equalTo: horizontalStackView.leadingAnchor),
-            toStackView.trailingAnchor.constraint(equalTo: horizontalStackView.trailingAnchor),
-            fromPickerView.topAnchor.constraint(equalTo: fromStackView.topAnchor),
-            fromPickerView.widthAnchor.constraint(equalTo: fromStackView.widthAnchor),
-            toPickerView.topAnchor.constraint(equalTo: toStackView.topAnchor),
-            toPickerView.widthAnchor.constraint(equalTo: toStackView.widthAnchor),
-            fromPickerView.widthAnchor.constraint(equalTo: toPickerView.widthAnchor),
+            countriesStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            countriesStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            countriesStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
+            countriesStackView.heightAnchor.constraint(equalToConstant: 150),
 
-            fromCurrency.leadingAnchor.constraint(equalTo: fromStackView.leadingAnchor, constant: 16),
-            fromCurrency.trailingAnchor.constraint(equalTo: fromStackView.trailingAnchor, constant: -16),
-            fromCurrency.heightAnchor.constraint(equalToConstant: 40),
+            amountsTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            amountsTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            amountsTitle.topAnchor.constraint(equalTo: countriesStackView.bottomAnchor, constant: 20),
 
-            toCurrency.leadingAnchor.constraint(equalTo: toStackView.leadingAnchor, constant: 16),
-            toCurrency.trailingAnchor.constraint(equalTo: toStackView.trailingAnchor, constant: -16),
-            toCurrency.heightAnchor.constraint(equalToConstant: 40),
-
-            fromStackView.heightAnchor.constraint(equalToConstant: 200),
-            toStackView.heightAnchor.constraint(equalToConstant: 200),
+            amountsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            amountsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            amountsStackView.topAnchor.constraint(equalTo: amountsTitle.bottomAnchor, constant: 20),
+            fromCurrency.widthAnchor.constraint(equalTo: toCurrency.widthAnchor),
 
             convertCurrencyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            convertCurrencyButton.topAnchor.constraint(equalTo: horizontalStackView.bottomAnchor, constant: 40),
+            convertCurrencyButton.topAnchor.constraint(equalTo: amountsStackView.bottomAnchor, constant: 40),
         ])
     }
     
