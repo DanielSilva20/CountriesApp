@@ -11,6 +11,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol HomeBusinessLogic {
     func searchCountry(request: Home.Search.Request)
@@ -27,32 +29,33 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var worker: HomeWorker?
     var selectedCountry: Country?
     var allCountries: [CountryCurrency]?
+    let disposeBag = DisposeBag()
 
     func searchCountry(request: Home.Search.Request) {
         worker = HomeWorker()
-        worker?.fetchCountryInfo(countryName: request.countryName) { [weak self] result in
-            switch result {
-            case .success(let country):
+        worker?.fetchCountryInfo(countryName: request.countryName)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] country in
                 let response = Home.Search.Response(result: .success(country))
                 self?.presenter?.presentCountrySearchResult(response: response)
                 self?.selectedCountry = country
-            case .failure(let error):
+            }, onError: { [weak self] error in
                 self?.presenter?.presentError(error: error)
-            }
-        }
+            })
+            .disposed(by: disposeBag)
     }
 
     func getAllCountries() {
         worker = HomeWorker()
-        worker?.fetchAllCountries(completion: { [weak self] result in
-            switch result {
-            case .success(let countries):
-                let response = Home.Countries.Response(result: .success(countries))
+        worker?.fetchAllCountries()
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] countryCurrency in
+                let response = Home.Countries.Response(result: .success(countryCurrency))
                 self?.presenter?.presentAllCountriesResult(response: response)
-                self?.allCountries = countries
-            case .failure(let error):
+                self?.allCountries = countryCurrency
+            }, onError: { [weak self] error in
                 self?.presenter?.presentError(error: error)
-            }
-        })
+            })
+            .disposed(by: disposeBag)
     }
 }

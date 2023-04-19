@@ -1,78 +1,75 @@
 import Foundation
+import RxCocoa
+import RxSwift
 
 class HomeWorker {
     private let apiClient = APIClient()
     
-    func fetchCountryInfo(countryName: String, completion: @escaping (Result<Country, Error>) -> Void) {
+    func fetchCountryInfo(countryName: String) -> Observable<Country> {
         guard let escapedName = countryName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "https://restcountries.com/v3.1/name/\(escapedName)?fullText=true") else {
-            completion(.failure(NetworkError.invalidURL))
-            return
+            return Observable.error(NetworkError.invalidURL)
         }
-        
-        apiClient.performRequest(url: url) { (result: Result<[Country], Error>) in
-            switch result {
-            case .success(let countries):
+
+        return apiClient.performRequest(url: url)
+            .flatMap { (countries: [Country]) -> Observable<Country> in
                 if let country = countries.first {
-                    completion(.success(country))
+                    return Observable.just(country)
                 } else {
-                    completion(.failure(NetworkError.noData))
+                    return Observable.error(NetworkError.noData)
                 }
-            case .failure(let error):
-                completion(.failure(error))
             }
-        }
     }
-    
-    func fetchAllCountries(completion: @escaping (Result<[CountryCurrency], Error>) -> Void) {
+
+    func fetchAllCountries() -> Observable<[CountryCurrency]> {
         guard let url = URL(string: "https://restcountries.com/v3.1/all") else {
-            completion(.failure(NetworkError.invalidURL))
-            return
+            return Observable.error(NetworkError.invalidURL)
         }
-        
-        apiClient.performRequest(url: url) { (result: Result<[CountryCurrency], Error>) in
-            switch result {
-            case .success(let countries):
-                completion(.success(countries))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+
+        return apiClient.performRequest(url: url)
     }
-    
     
     // A simple API client to handle network requests
     class APIClient {
-        func performRequest<T: Decodable>(url: URL, completion: @escaping (Result<T, Error>) -> Void) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
+        func performRequest<T: Decodable>(url: URL) -> Observable<T> {
+            return Observable.create { observer in
+                let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                    if let error = error {
+                        observer.onError(error)
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        observer.onError(NetworkError.noData)
+                        return
+                    }
+
+                    guard let data = data else {
+                        observer.onError(NetworkError.noData)
+                        return
+                    }
+
+                    // Check for API errors
+                    if httpResponse.statusCode == 404 {
+                        observer.onError(APIError.notFound)
+                        return
+                    }
+
+                    do {
+                        let decodedObject = try JSONDecoder().decode(T.self, from: data)
+                        observer.onNext(decodedObject)
+                        observer.onCompleted()
+                    } catch {
+                        observer.onError(NetworkError.decodingError)
+                    }
                 }
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    completion(.failure(NetworkError.noData))
-                    return
+                task.resume()
+
+                return Disposables.create {
+                    task.cancel()
                 }
-                
-                guard let data = data else {
-                    completion(.failure(NetworkError.noData))
-                    return
-                }
-                
-                // Check for API errors
-                if httpResponse.statusCode == 404 {
-                    completion(.failure(APIError.notFound))
-                    return
-                }
-                
-                do {
-                    let decodedObject = try JSONDecoder().decode(T.self, from: data)
-                    completion(.success(decodedObject))
-                } catch {
-                    completion(.failure(NetworkError.decodingError))
-                }
-            }.resume()
+            }
+
         }
     }
 }

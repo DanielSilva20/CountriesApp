@@ -33,6 +33,7 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     private var convertCurrencyTitle: UILabel!
 
     private let didTapSubmitCountry = PublishRelay<Void>()
+    private let didTapConvertCurrency = PublishRelay<Void>()
     let disposeBag = DisposeBag()
 
     // MARK: Object lifecycle
@@ -56,6 +57,10 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
 
         submitCountryButton.rx.tap
             .bind(to: didTapSubmitCountry)
+            .disposed(by: disposeBag)
+
+        convertCurrencyButton.rx.tap
+            .bind(to: didTapConvertCurrency)
             .disposed(by: disposeBag)
     }
 
@@ -104,7 +109,6 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
         convertCurrencyButton.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 10)
         convertCurrencyButton.layer.cornerRadius = 5
         convertCurrencyButton.backgroundColor = .systemBlue
-        convertCurrencyButton.addTarget(self, action: #selector(changeCurrency), for: .touchUpInside)
         convertCurrencyButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
@@ -155,12 +159,17 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+
         didTapSubmitCountry.subscribe(onNext: { [weak self] in
             guard let searchText = self?.searchTextField.text else {
                 return
             }
             let request = Home.Search.Request(countryName: searchText)
             self?.interactor?.searchCountry(request: request)
+        }).disposed(by: disposeBag)
+
+        didTapConvertCurrency.subscribe(onNext: { [weak self] in
+            self?.interactor?.getAllCountries()
         }).disposed(by: disposeBag)
     }
 
@@ -181,18 +190,6 @@ class HomeViewController: UIViewController, HomeDisplayLogic {
                 self?.searchTextField.text = ""
             }
         }
-    }
-
-//    @objc private func submitCountry() {
-//        guard let searchText = searchTextField.text else {
-//            return
-//        }
-//        let request = Home.Search.Request(countryName: searchText)
-//        interactor?.searchCountry(request: request)
-//    }
-
-    @objc private func changeCurrency() {
-        interactor?.getAllCountries()
     }
 
     func sendAllCountries(viewModel: Home.Countries.ViewModel) {
